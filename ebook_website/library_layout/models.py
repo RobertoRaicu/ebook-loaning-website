@@ -48,7 +48,7 @@ class ebook(models.Model):
                                         MinValueValidator(1)
                                     ])
 
-    ebook_cotent = models.CharField(max_length=2560)
+    ebook_content = models.CharField(max_length=2560)
 
     def __str__(self):
         return self.name
