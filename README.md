@@ -13,9 +13,6 @@ django models (Tables):
 -First Name
 -Surname
 # -- extra user variables (blank=True)
--City of residence
--Country of residence
--Date of birth
 -Profile picture
 
 ---author model---

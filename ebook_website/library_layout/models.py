@@ -10,11 +10,7 @@ class UserProfileInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     #additional user rows
-    city_of_residece = models.CharField(max_length=256,blank=True)
-
     country_of_residence = models.CharField(max_length=256,blank=True)
-
-    date_of_birth = models.DateField(blank=True)
 
     profile_pic = models.ImageField(upload_to='profile_pics',blank=True)
 

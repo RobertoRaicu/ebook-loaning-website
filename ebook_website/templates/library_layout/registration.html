@@ -1,0 +1,62 @@
+{% extends "library_layout/base.html" %}
+
+{% block body_block %}
+  <div class="container">
+    <div class="jumbotron">
+      {% if registered %}
+        <h1>Thank you for registering!</h1>
+      {% else %}
+        <h1>Register Here</h1>
+        <h3>Just fill out the form.</h3>
+
+        <!-- validation only showing in terminal and not on page -->
+        {% if form.errors %}
+          {% for field in form.errors %}
+            {% for error in field.errors %}
+              <p> {{ error }} </p>
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
+
+        <form enctype="multipart/form-data" method="POST">
+          {% csrf_token %}
+          <div class="row mb-3">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label>
+            <div class="col-sm-10">
+              {{ user_form.username }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+              {{ user_form.email }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">password</label>
+            <div class="col-sm-10">
+              {{ user_form.password }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">password veriffication</label>
+            <div class="col-sm-10">
+              {{ user_form.verify_pass }}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">profile picture</label>
+            <div class="col-sm-10">
+              {{ profile_form.profile_pic }}
+            </div>
+          </div>
+          <input type="submit" name="" value="Register">
+        </form>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+{% endblock %}
