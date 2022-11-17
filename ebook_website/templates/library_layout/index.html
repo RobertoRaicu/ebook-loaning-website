@@ -1,8 +1,54 @@
 {% extends "library_layout/base.html" %}
 {% block body_block %}
-<div>
-    <h1>Index page</h1>
-</div>
-
-
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>books</h1>
+                {% if book_records %}
+                    <table class="table border-dark table-hover background-table">
+                        <thead>
+                            <th scope="col"><h5>name</h5></th>
+                            <th scope="col"><h5>author</h5></th>
+                            <th scope="col"><h5>year published</h5></th>
+                        </thead>
+                        <tbody>
+                        {% for book in book_records %}
+                            <tr>
+                                <td><b>{{ book.name }}</b></td>
+                                <td><b>{{ book.author }}</b></td>
+                                <td><b>{{ book.year_published }}</b></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                <p>no ebooks in database</p>
+                {% endif %}
+            </div>
+            <div class="col">
+                <h1>authors</h1>
+                {% if author_records %}
+                    <table class="table border-dark table-hover background-table">
+                        <thead>
+                            <th scope="col"><h5>name</h5></th>
+                            <th scope="col"><h5>author</h5></th>
+                            <th scope="col"><h5>year published</h5></th>
+                        </thead>
+                        <tbody>
+                        {% for author in author_records %}
+                            <tr>
+                                <td><b>{{ author.name }}</b></td>
+                                <td><b>{{ author.birth_year }}</b></td>
+                                <td><b>{{ author.nationality }}</b></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                <p>no authors in database</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
 {% endblock %}

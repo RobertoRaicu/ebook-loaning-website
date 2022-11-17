@@ -1,0 +1,27 @@
+{% extends 'library_layout/base.html' %}
+
+{% block body_block %}
+    <div class="center">
+        {% if book_records %}
+            <table class="table border-dark table-hover background-table">
+                <thead>
+                    <th scope="col"><h5>name</h5></th>
+                    <th scope="col"><h5>author</h5></th>
+                    <th scope="col"><h5>year published</h5></th>
+                </thead>
+                <tbody>
+                {% for book in book_records %}
+                    <tr>
+                        <td><b>{{ book.name }}</b></td>
+                        <td><b>{{ book.author }}</b></td>
+                        <td><b>{{ book.year_published }}</b></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+        <p>no ebooks in database</p>
+        {% endif %}
+    </div>
+
+{% endblock %}

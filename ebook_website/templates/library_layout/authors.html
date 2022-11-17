@@ -1,0 +1,26 @@
+{% extends 'library_layout/base.html' %}
+{% block body_block %}
+    <div class="center">
+        {% if author_records %}
+            <table class="table border-dark table-hover background-table">
+                <thead>
+                    <th scope="col"><h5>name</h5></th>
+                    <th scope="col"><h5>author</h5></th>
+                    <th scope="col"><h5>year published</h5></th>
+                </thead>
+                <tbody>
+                {% for author in author_records %}
+                    <tr>
+                        <td><b>{{ author.name }}</b></td>
+                        <td><b>{{ author.birth_year }}</b></td>
+                        <td><b>{{ author.nationality }}</b></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+        <p>no authors in database</p>
+        {% endif %}
+    </div>
+
+{% endblock %}

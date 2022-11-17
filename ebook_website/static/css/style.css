@@ -1,0 +1,21 @@
+a {
+    text-decoration: none;
+    color: black;
+}
+
+table, th, td {
+    border: 3px solid black;
+    border-collapse: separate;
+    overflow-x: auto;
+}
+
+.background-table {
+    background-image: url("../images/light-soft-color-blue-low-poly-background.png");
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+  }

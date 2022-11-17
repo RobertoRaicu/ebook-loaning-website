@@ -11,16 +11,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+<!-- ignore the error, the url() works -->
+<body id="bg" style="background-image: url('{% static "images\20603977_background3.jpg" %}');">
+    <nav class="navbar navbar-expand-lg bg-muted">
+        <div class="container-fluid ml-auto">
+            <a class="navbar-brand" href="{% url 'index' %}">
                 <img src="{% static '/images/book-clipart.png' %}" width="30" height="24"
                     class="d-inline-block align-text-top">
                 eLibrary
             </a>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -29,18 +32,25 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+                        {% if user.is_authenticated %}
+                            <a class="navbar-link btn btn-danger" href="{% url 'library_layout:user_logout' %}" role="button">Logout</a>
+                        {% else %}
+                            <a class="navbar-link btn btn-success" href="{% url 'library_layout:user_login' %}" role="button">Login</a>
+                        {% endif %}
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'admin:index' %}">admin</a>
+                        <a class="nav-link active" href="{% url 'library_layout:display_books' %}">Books</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'library_layout:register' %}">register</a>
+                        <a class="nav-link active" href="{% url 'library_layout:display_authors' %}">Authors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'library_layout:register' %}">Register</a>
                     </li>
                 </ul>
                 <!-- search bar -->
                 <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <input class="form-control me-2" type="search" placeholder="Search book" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
@@ -49,8 +59,6 @@
 
     <div>
         {% block body_block %}
-
-
         {% endblock %}
     </div>
 
