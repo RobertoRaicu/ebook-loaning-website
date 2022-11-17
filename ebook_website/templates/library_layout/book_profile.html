@@ -1,0 +1,26 @@
+{% extends 'library_layout/base.html' %}
+{% block body_block %}
+<div class="jumbotron book-display">
+    <p><h1 class="fw-bolder mb-1">{{book_info.name}}</h1>
+    <!-- add link to author -->
+    <p><h5 class="text-secondary">by {{book_info.author}}</h5></p>
+    <p class="text-secondary">published: {{book_info.year_published}}</p>
+    <img src="https://picsum.photos/id/{{random}}/500/281" alt="">
+    {% if user.is_authenticated %}
+        <p><a class="navbar-link btn btn-danger" href="" role="button">Save</a>
+        {% if book_info.loan_type == 3 %}
+            can be saved for up to 3 days
+        {% elif book_info.loan_type == 2 %}
+            can be saved for up to 7 days
+        {% else %}
+            can be saved for up to 14 days
+        {% endif %}</p>
+    {% endif %}
+    <br>
+    <div style="max-width: 1000px;">
+        {{book_info.ebook_content}}
+    </div>
+</div>
+
+
+{% endblock %}

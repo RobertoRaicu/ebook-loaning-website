@@ -19,3 +19,8 @@ table, th, td {
     padding: 10px;
     text-align: center;
   }
+
+.book-display {
+    margin-left: 50px;
+    border-width: 1em;
+}

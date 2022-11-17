@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-
+import random
 
 # Create your views here.
 
@@ -95,6 +95,10 @@ def index(request):
     items_dict = {'book_records':ebook_list,'author_records':author_list}
     return render(request,'library_layout/index.html',context=items_dict)
 
+def book_profile(request, bookid):
+    book_info = ebook.objects.get(id=bookid)
+    info_dict = {'book_info':book_info,'random':random.randint(0,500)}
+    return render(request, 'library_layout/book_profile.html',context=info_dict)
 
 
 
