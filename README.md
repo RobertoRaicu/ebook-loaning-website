@@ -51,3 +51,6 @@ django models (Tables):
 # 1 to 5
 -rating
 -text_field
+
+bugs: errors not displaying on /register
+      ebooks <a> tag not working
