@@ -1,11 +1,12 @@
 {% extends 'library_layout/base.html' %}
 {% block body_block %}
 <div class="jumbotron book-display">
-    <p><h1 class="fw-bolder mb-1">{{book_info.name}}</h1>
+    <p><h1 class="fw-bolder mb-1">{{book_info.name}}</h1></p>
     <!-- add link to author -->
-    <p><h5 class="text-secondary">by {{book_info.author}}</h5></p>
+    <p><h5 class="text-secondary">by<a href="{% url 'library_layout:author_profile' book_info.author %}" class="text-secondary"> {{book_info.author}}</a></h5></p>
     <p class="text-secondary">published: {{book_info.year_published}}</p>
     <img src="https://picsum.photos/id/{{random}}/500/281" alt="">
+    <br>
     {% if user.is_authenticated %}
         <p><a class="navbar-link btn btn-danger" href="" role="button">Save</a>
         {% if book_info.loan_type == 3 %}
@@ -17,9 +18,78 @@
         {% endif %}</p>
     {% endif %}
     <br>
-    <div style="max-width: 1000px;">
+    <div style="max-width: 1000px;background-color: rgb(255, 255, 255,.5);">
         {{book_info.ebook_content}}
     </div>
+    <br>
+    <section class="content-item" id="comments">
+        <div class="book-display">   
+            <div class="row">
+                <div class="col-sm-8">   
+                    <form action="{% url 'library_layout:book_profile' book_info.name %}" method="POST">
+                        {% csrf_token %}
+                        <h3 class="pull-left">New review</h3>
+                        
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-sm-3 col-lg-2 hidden-xs">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" style="max-height: 100px; max-width: 100px;">
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-9 col-lg-10">
+                                    <textarea class="form-control" id="message" placeholder="Your review" required="" name="reviewtext"></textarea>
+                                    <label class="radio-inline">
+                                        rating: &nbsp;
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1" required>
+                                            <label class="form-check-label" for="inlineRadio1">1</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+                                            <label class="form-check-label" for="inlineRadio2">2</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="3">
+                                            <label class="form-check-label" for="inlineRadio1">3</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="4">
+                                            <label class="form-check-label" for="inlineRadio2">4</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="5">
+                                            <label class="form-check-label" for="inlineRadio2">5</label>
+                                        </div><br>
+                                    </label>
+                                </div>
+                                
+                            </div>  	
+                        </fieldset>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </form>
+                    
+                    <h3>4 Reviews</h3>
+                    
+                    <!-- COMMENT 1 - START -->
+                    <div class="media">
+                        <img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                        <div class="media-body">
+                            <h4 class="media-heading">John Doe</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <ul class="list-unstyled list-inline media-detail pull-left">
+                                <li><i class="fa fa-calendar"></i>27/02/2014</li>
+                                <li><i class="fa fa-thumbs-up"></i>13</li>
+                            </ul>
+                            <ul class="list-unstyled list-inline media-detail pull-right">
+                                <li class=""><a href="">Like</a></li>
+                                <li class=""><a href="">Reply</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- COMMENT 1 - END -->
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
 

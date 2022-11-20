@@ -48,6 +48,12 @@ def register(request):
 
         else:
             print(user_form.errors,profile_form.errors)
+            return render(request,'library_layout/registration.html',
+                          {'user_form':user_form,
+                           'profile_form':profile_form,
+                           'registered':registered,
+                           'userformerror':user_form.errors,
+                           'profileformerror':profile_form.errors})
 
     else:
         user_form = UserForm()
@@ -71,7 +77,6 @@ def user_login(request):
             return HttpResponseRedirect(reverse('index'))
 
         else:
-            # use HttpResponse incase raise does not work
             # return HttpResponse('Incorrect username or password')
             dict = {"error":"Incorrect username or password"}
             return render(request, 'library_layout/login.html',context=dict)
@@ -80,9 +85,16 @@ def user_login(request):
         return render(request, 'library_layout/login.html',{})
 
 def display_books(request):
-    ebook_list = ebook.objects.order_by('id')
-    books_dict = {'book_records':ebook_list}
-    return render(request,'library_layout/ebooks.html',context=books_dict)
+    if request.method == "POST":
+        search = request.POST.get('searched')
+        ebook_list = ebook.objects.filter(name__contains=search)
+        books_dict = {'book_records':ebook_list}
+        return render(request,'library_layout/ebooks.html',context=books_dict)
+    elif request.method == "GET":
+        ebook_list = ebook.objects.order_by('id')
+        books_dict = {'book_records':ebook_list}
+        return render(request,'library_layout/ebooks.html',context=books_dict)
+
 
 def display_authors(request):
     author_list = author.objects.order_by('name')
@@ -95,10 +107,25 @@ def index(request):
     items_dict = {'book_records':ebook_list,'author_records':author_list}
     return render(request,'library_layout/index.html',context=items_dict)
 
-def book_profile(request, bookid):
-    book_info = ebook.objects.get(id=bookid)
-    info_dict = {'book_info':book_info,'random':random.randint(0,500)}
+def book_profile(request, bookname):
+    if request.method == "POST":
+        review_text = request.POST.get('reviewtext')
+        rating = request.POST.get('inlineRadioOptions')
+        if review_text.is_valid() and rating.is_valid():
+            review_instance = review.objects.get_or_create(user=request.user,ebook=bookname,rating=rating,text_field=review_text)
+            review_instance.save()
+            print("review saved")
+            return HttpResponseRedirect(reverse('book_profile'))
+        else:
+            print("error: review not saved")
+    book_info = ebook.objects.get(name=bookname)
+    info_dict = {'book_info':book_info,'random':random.randint(0,300),}
     return render(request, 'library_layout/book_profile.html',context=info_dict)
 
+def author_profile(request, authorname):
+    author_info = author.objects.get(name=authorname)
+    book_info = ebook.objects.filter(author=author_info.id)
+    info_dict = {'author_info':author_info,'book_info':book_info}
+    return render(request, 'library_layout/author_profile.html',context=info_dict)
 
 

@@ -1,7 +1,7 @@
 {% extends 'library_layout/base.html' %}
 
 {% block body_block %}
-    <div class="center">
+    <div class="center" style="max-height: 700px;overflow:auto; border-style: outset;">
         {% if book_records %}
             <table class="table border-dark table-hover background-table">
                 <thead>
@@ -12,8 +12,8 @@
                 <tbody>
                 {% for book in book_records %}
                     <tr>
-                        <td><b><a href="{% url 'library_layout:book_profile:{{book.id}}' %}">{{ book.name }}</a></b></td>
-                        <td><b>{{ book.author }}</b></td>
+                        <td><b><a href="{% url 'library_layout:book_profile' book.name %}">{{ book.name }}</a></b></td>
+                        <td><b><a href="{% url 'library_layout:author_profile' book.author %}">{{ book.author }}</a></b></td>
                         <td><b>{{ book.year_published }}</b></td>
                     </tr>
                 {% endfor %}

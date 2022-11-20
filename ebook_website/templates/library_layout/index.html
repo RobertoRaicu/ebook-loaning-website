@@ -14,8 +14,8 @@
                         <tbody>
                         {% for book in book_records %}
                             <tr>
-                                <td><b>{{ book.name }}</b></td>
-                                <td><b>{{ book.author }}</b></td>
+                                <td><b><a href="{% url 'library_layout:book_profile' book.name %}">{{ book.name }}</a></b></td>
+                                <td><b><a href="{% url 'library_layout:author_profile' book.author %}">{{ book.author }}</a></b></td>
                                 <td><b>{{ book.year_published }}</b></td>
                             </tr>
                         {% endfor %}
@@ -31,13 +31,13 @@
                     <table class="table border-dark table-hover background-table">
                         <thead>
                             <th scope="col"><h5>name</h5></th>
-                            <th scope="col"><h5>author</h5></th>
-                            <th scope="col"><h5>year published</h5></th>
+                            <th scope="col"><h5>year of birth</h5></th>
+                            <th scope="col"><h5>nationality</h5></th>
                         </thead>
                         <tbody>
                         {% for author in author_records %}
                             <tr>
-                                <td><b>{{ author.name }}</b></td>
+                                <td><b><a href="{% url 'library_layout:author_profile' author.name %}">{{ author.name }}</a></b></td>
                                 <td><b>{{ author.birth_year }}</b></td>
                                 <td><b>{{ author.nationality }}</b></td>
                             </tr>

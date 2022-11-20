@@ -1,0 +1,33 @@
+{% extends 'library_layout/base.html' %}
+{% block body_block %}
+{% load static %}
+<div class="center" style="border: 3px solid black; max-width: 450px;">
+    <div class="row" style="border: 3px solid black;">
+        <div class="col-sm-6 col-md-4">
+            <img src="{% static 'images/user-default.png' %}" width="140" height="210" alt="" class="img-rounded img-responsive" />
+        </div>
+        <div class="col-sm-6 col-md-8">
+            <h4>{{author_info.name}}</h4>
+            <small><cite title="San Francisco, USA">{{author_info.nationality}}</cite></small>
+        </div>
+    </div>
+    <div style="max-height: 400px;overflow:auto;">
+        books published by {{author_info.name}}
+        <table>
+            <thead>
+                <th>title</th>
+                <th>year published</th>
+            </thead>
+            <tbody>
+                {% for book in book_info %}
+                    <tr>
+                        <td><a href="{% url 'library_layout:book_profile' book.name %}">{{book.name}}</a></td>
+                        <td>{{book.year_published}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

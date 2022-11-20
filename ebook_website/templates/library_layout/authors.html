@@ -1,17 +1,17 @@
 {% extends 'library_layout/base.html' %}
 {% block body_block %}
-    <div class="center">
+    <div class="center" style="max-height: 700px;overflow:auto; border-style: outset;">
         {% if author_records %}
             <table class="table border-dark table-hover background-table">
                 <thead>
                     <th scope="col"><h5>name</h5></th>
-                    <th scope="col"><h5>author</h5></th>
-                    <th scope="col"><h5>year published</h5></th>
+                    <th scope="col"><h5>year of birth</h5></th>
+                    <th scope="col"><h5>nationality</h5></th>
                 </thead>
                 <tbody>
                 {% for author in author_records %}
                     <tr>
-                        <td><b>{{ author.name }}</b></td>
+                        <td><b><a href="{% url 'library_layout:author_profile' author.name %}">{{ author.name }}</a></b></td>
                         <td><b>{{ author.birth_year }}</b></td>
                         <td><b>{{ author.nationality }}</b></td>
                     </tr>

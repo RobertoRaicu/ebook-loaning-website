@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from library_layout.models import UserProfileInfo
 from django.core import validators
+from library_layout.models import review
 
 
 # User forms
@@ -30,5 +31,7 @@ class UserProfileInfoForm(forms.ModelForm):
     class Meta():
         model = UserProfileInfo
         fields = ("profile_pic",)
+
+
 
     
