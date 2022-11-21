@@ -32,6 +32,14 @@ class UserProfileInfoForm(forms.ModelForm):
         model = UserProfileInfo
         fields = ("profile_pic",)
 
+class ReviewForm(forms.ModelForm):
+    text_field = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control',
+                                                 'id':'message',
+                                                 'placeholder':'Your review',
+                                                 'required':'',}))
+    class Meta():
+        model = review
+        fields = ("text_field",)
 
 
     

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from library_layout.forms import UserForm, UserProfileInfoForm
+from library_layout.forms import UserForm, UserProfileInfoForm, ReviewForm
 from library_layout.models import author, ebook, loan, review
 
 from django.contrib.auth import authenticate,login,logout
@@ -109,17 +109,18 @@ def index(request):
 
 def book_profile(request, bookname):
     if request.method == "POST":
-        review_text = request.POST.get('reviewtext')
-        rating = request.POST.get('inlineRadioOptions')
-        if review_text.is_valid() and rating.is_valid():
-            review_instance = review.objects.get_or_create(user=request.user,ebook=bookname,rating=rating,text_field=review_text)
-            review_instance.save()
+        review_form = ReviewForm(data=request.POST)
+        review_rate = request.POST.get('inlineRadioOptions')
+        if review_form.is_valid():
+            clean_text = review_form.cleaned_data['text_field']
+            ebookdata = ebook.objects.get(name=bookname)
+            review.objects.get_or_create(user=request.user,ebook=ebookdata,rating=review_rate,text_field=clean_text)
             print("review saved")
-            return HttpResponseRedirect(reverse('book_profile'))
         else:
             print("error: review not saved")
+    review_form = ReviewForm()
     book_info = ebook.objects.get(name=bookname)
-    info_dict = {'book_info':book_info,'random':random.randint(0,300),}
+    info_dict = {'book_info':book_info,'random':random.randint(0,300),"review_form":review_form}
     return render(request, 'library_layout/book_profile.html',context=info_dict)
 
 def author_profile(request, authorname):
