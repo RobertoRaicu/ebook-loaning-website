@@ -10,8 +10,16 @@ table, th, td {
 }
 
 .background-table {
-    background-image: url("../images/light-soft-color-blue-low-poly-background.png");
+    background-image: url("../images/seamless-abstract-repeatable-vector.png");
 }
+
+#bg {
+    background-image: url("../images/20603977_background3.jpg");
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 
 .center {
     margin: auto;
@@ -32,12 +40,11 @@ color: #999;
 }
 
 .content-item {
-    padding:30px 0;
-	background-color:#FFFFFF;
+    padding:5px 0;
 }
 
 .content-item.grey {
-	background-color:#F0F0F0;
+
 	padding:50px 0;
 	height:100%;
 }
@@ -65,26 +72,16 @@ color: #999;
 }
 
 .content-headline h2 {
-	background-color:#FFFFFF;
+
 	display:inline-block;
 	margin:-20px auto 0;
 	padding:0 20px;
-}
-
-.grey .content-headline h2 {
-	background-color:#F0F0F0;
 }
 
 .content-headline h3 {
 	font-size:14px;
 	color:#AAAAAA;
 	display:block;
-}
-
-
-#comments {
-    box-shadow: 0 -1px 6px 1px rgba(0,0,0,0.1);
-	background-color:#FFFFFF;
 }
 
 #comments form {
@@ -104,7 +101,7 @@ color: #999;
 }
 
 #comments .media {
-	border-top:1px dashed #DDDDDD;
+	border-top:1px dashed black;
 	padding:20px 0;
 	margin:0;
 }
@@ -156,3 +153,7 @@ color: #999;
 	font-size:15px;
 	margin-right:10px;
 }
+
+.checked {
+    color: orange;
+  }

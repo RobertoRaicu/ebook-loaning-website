@@ -26,6 +26,7 @@ urlpatterns = [
     path('books', views.display_books, name='display_books'),
     path('authors', views.display_authors, name='display_authors'),
     path('book_profile/<bookname>/', views.book_profile, name='book_profile'),
+    path('book_profile/<bookname>/<ratefilter>', views.book_profile, name='book_profile'),
     path('author/<authorname>', views.author_profile, name='author_profile'),
 
     

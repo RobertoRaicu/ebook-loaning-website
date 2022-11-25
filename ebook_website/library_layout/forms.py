@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
-from library_layout.models import UserProfileInfo
 from django.core import validators
 from library_layout.models import review
+
 
 
 # User forms
@@ -24,13 +24,6 @@ class UserForm(forms.ModelForm):
 
         if password != verify_pass:
             raise forms.ValidationError("passwords do not match")
-
-    
-
-class UserProfileInfoForm(forms.ModelForm):
-    class Meta():
-        model = UserProfileInfo
-        fields = ("profile_pic",)
 
 class ReviewForm(forms.ModelForm):
     text_field = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control',

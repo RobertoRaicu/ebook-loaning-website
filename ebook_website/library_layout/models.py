@@ -3,16 +3,13 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
 
+import datetime
+
 # Create your models here.
 
 class UserProfileInfo(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    #additional user rows
-    country_of_residence = models.CharField(max_length=256,blank=True)
-
-    profile_pic = models.ImageField(upload_to='profile_pics',blank=True)
 
     def __str__(self):
         return self.user.username
@@ -81,3 +78,5 @@ class review(models.Model):
                                         ])
     
     text_field = models.CharField(max_length=500)
+
+    date = models.DateField(default=datetime.date.today)

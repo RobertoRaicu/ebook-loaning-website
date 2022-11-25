@@ -4,3 +4,4 @@ Django[argon2]
 pillow==9.3.0
 Faker==15.3
 python-decouple==3.6
+validators

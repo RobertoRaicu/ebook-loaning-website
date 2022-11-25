@@ -2,10 +2,13 @@
 
 {% block body_block %}
     <div class="center" style="max-height: 700px;overflow:auto; border-style: outset;">
+        <div style="border-style: outset;">
+            <h1>books</h1>
+        </div>
         {% if book_records %}
             <table class="table border-dark table-hover background-table">
                 <thead>
-                    <th scope="col"><h5>name</h5></th>
+                    <th scope="col"><h5>title</h5></th>
                     <th scope="col"><h5>author</h5></th>
                     <th scope="col"><h5>year published</h5></th>
                 </thead>

@@ -11,13 +11,11 @@
         {% else %}
           <h1>Register Here</h1>
           <h3>Just fill out the form.</h3>
-
-          <!-- validation only showing in terminal and not on page -->
-          {% if useformerror %}
-            {{userformerror}}
-          {% elif profileformerror %}
-            {{profileformerror}}
-          {% endif %}
+          {% for field, errors in user_form.errors.items %}
+            {% for error in errors %}
+              {{ error }}
+            {% endfor %}
+          {% endfor %}
 
           <form enctype="multipart/form-data" method="POST">
             {% csrf_token %}
@@ -43,12 +41,6 @@
               <label for="inputEmail3" class="col-sm-2 col-form-label">password veriffication</label>
               <div class="col-sm-10">
                 {{ user_form.verify_pass }}
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label for="inputEmail3" class="col-sm-2 col-form-label">profile picture</label>
-              <div class="col-sm-10">
-                {{ profile_form.profile_pic }}
               </div>
             </div>
             <input type="submit" name="" value="Register">

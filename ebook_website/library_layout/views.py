@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from library_layout.forms import UserForm, UserProfileInfoForm, ReviewForm
+from library_layout.forms import UserForm, ReviewForm
 from library_layout.models import author, ebook, loan, review
 
 from django.contrib.auth import authenticate,login,logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 import random
 
@@ -24,9 +25,8 @@ def register(request):
     if request.method == 'POST':
 
         user_form = UserForm(data=request.POST)
-        profile_form = UserProfileInfoForm(data=request.POST)
 
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
 
             user = user_form.save()
 
@@ -34,34 +34,19 @@ def register(request):
 
             user.save()
 
-            profile = profile_form.save(commit=False)
-
-            profile.user = user
-
-            if 'profile_pic' in request.FILES:
-                print('found it')
-                profile.profile_pic = request.FILES['profile_pic']
-
-            profile.save()
-
             registered = True
 
         else:
-            print(user_form.errors,profile_form.errors)
+            print(user_form.errors)
             return render(request,'library_layout/registration.html',
                           {'user_form':user_form,
-                           'profile_form':profile_form,
-                           'registered':registered,
-                           'userformerror':user_form.errors,
-                           'profileformerror':profile_form.errors})
+                           'registered':registered,})
 
     else:
         user_form = UserForm()
-        profile_form = UserProfileInfoForm()
-        
+         
     return render(request,'library_layout/registration.html',
                           {'user_form':user_form,
-                           'profile_form':profile_form,
                            'registered':registered})
 
 def user_login(request):
@@ -97,9 +82,15 @@ def display_books(request):
 
 
 def display_authors(request):
-    author_list = author.objects.order_by('name')
-    authors_dict = {'author_records':author_list}
-    return render(request,'library_layout/authors.html',context=authors_dict)
+    if request.method == "POST":
+        search = request.POST.get('searchedauthor')
+        author_list = author.objects.filter(name__contains=search)
+        authors_dict = {'author_records':author_list}
+        return render(request,'library_layout/authors.html',context=authors_dict)
+    elif request.method == "GET":
+        author_list = author.objects.order_by('name')
+        authors_dict = {'author_records':author_list}
+        return render(request,'library_layout/authors.html',context=authors_dict)
 
 def index(request):
     author_list = author.objects.order_by('name')
@@ -107,20 +98,27 @@ def index(request):
     items_dict = {'book_records':ebook_list,'author_records':author_list}
     return render(request,'library_layout/index.html',context=items_dict)
 
-def book_profile(request, bookname):
+def book_profile(request, bookname, ratefilter=False):
     if request.method == "POST":
         review_form = ReviewForm(data=request.POST)
         review_rate = request.POST.get('inlineRadioOptions')
         if review_form.is_valid():
             clean_text = review_form.cleaned_data['text_field']
             ebookdata = ebook.objects.get(name=bookname)
-            review.objects.get_or_create(user=request.user,ebook=ebookdata,rating=review_rate,text_field=clean_text)
+            review.objects.create(user=request.user,ebook=ebookdata,rating=review_rate,text_field=clean_text)
             print("review saved")
         else:
             print("error: review not saved")
-    review_form = ReviewForm()
+
     book_info = ebook.objects.get(name=bookname)
-    info_dict = {'book_info':book_info,'random':random.randint(0,300),"review_form":review_form}
+
+    if ratefilter:
+        reviews = review.objects.filter(rating=ratefilter,ebook=book_info)
+    else:
+        reviews = review.objects.filter(ebook=book_info).order_by('-date')
+
+    review_form = ReviewForm()
+    info_dict = {'book_info':book_info,'random':random.randint(0,300),"review_form":review_form,"reviews":reviews,"reviews_amount":len(reviews),}
     return render(request, 'library_layout/book_profile.html',context=info_dict)
 
 def author_profile(request, authorname):

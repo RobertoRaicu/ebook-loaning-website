@@ -1,13 +1,21 @@
 {% extends "library_layout/base.html" %}
 {% block body_block %}
-    <div class="container">
+    <div class="container"  style="border-style: outset;">
         <div class="row">
-            <div class="col">
+            <div class="col" style="border-style: outset;">
                 <h1>books</h1>
+            </div>
+            <div class="col" style="border-style: outset;">
+                <h1>authors</h1>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col" style="max-height: 700px;overflow:auto;">
                 {% if book_records %}
                     <table class="table border-dark table-hover background-table">
                         <thead>
-                            <th scope="col"><h5>name</h5></th>
+                            <th scope="col"><h5>title</h5></th>
                             <th scope="col"><h5>author</h5></th>
                             <th scope="col"><h5>year published</h5></th>
                         </thead>
@@ -25,8 +33,7 @@
                 <p>no ebooks in database</p>
                 {% endif %}
             </div>
-            <div class="col">
-                <h1>authors</h1>
+            <div class="col" style="max-height: 700px;overflow:auto;">
                 {% if author_records %}
                     <table class="table border-dark table-hover background-table">
                         <thead>

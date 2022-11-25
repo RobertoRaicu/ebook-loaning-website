@@ -10,10 +10,6 @@ django models (Tables):
 -Username
 -Email
 -Password
--First Name
--Surname
-# -- extra user variables (blank=True)
--Profile picture
 
 ---author model---
 
@@ -51,6 +47,7 @@ django models (Tables):
 # 1 to 5
 -rating
 -text_field
+-date
 
 bugs: errors not displaying on /register
       ebooks <a> tag not working

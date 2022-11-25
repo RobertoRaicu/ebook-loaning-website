@@ -2,7 +2,6 @@
 {% block body_block %}
 <div class="jumbotron book-display">
     <p><h1 class="fw-bolder mb-1">{{book_info.name}}</h1></p>
-    <!-- add link to author -->
     <p><h5 class="text-secondary">by<a href="{% url 'library_layout:author_profile' book_info.author %}" class="text-secondary"> {{book_info.author}}</a></h5></p>
     <p class="text-secondary">published: {{book_info.year_published}}</p>
     <img src="https://picsum.photos/id/{{random}}/500/281" alt="">
@@ -17,13 +16,25 @@
             can be saved for up to 14 days
         {% endif %}</p>
     {% endif %}
-    <br>
+        <p><h4><a href="#reviews" >{{reviews_amount}}  reviews</a></h4></p>
     <div style="max-width: 1000px;background-color: rgb(255, 255, 255,.5);">
         {{book_info.ebook_content}}
     </div>
     <br>
+    <div class="row" id="reviews">
+        <div class="col">
+            filter by:
+            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name %}#reviews ">all</a>
+            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name 1 %}#reviews ">⭐ 1</a>
+            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name 2 %}#reviews ">⭐ 2</a>
+            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name 3 %}#reviews ">⭐ 3</a>
+            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name 4 %}#reviews ">⭐ 4</a>
+            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name 5 %}#reviews ">⭐ 5</a>
+        </div>
+    </div>
+    </form>
     <section class="content-item" id="comments">
-        <div class="book-display">   
+        <div>   
             <div class="row">
                 <div class="col-sm-8">   
                     <form action="{% url 'library_layout:book_profile' book_info.name %}" method="POST">
@@ -64,27 +75,38 @@
                                 
                             </div>  	
                         </fieldset>
-                        <button type="submit" class="btn btn-success">Submit</button>
+                        {% if user.is_authenticated %}
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        {% else %}
+                            <a class="btn btn-success" href="{% url 'library_layout:user_login' %}">Submit</a>
+                        {% endif %}
                     </form>
                     
-                    <h3>4 Reviews</h3>
+                    <h3>{{reviews_amount}} Reviews</h3>
                     
                     <!-- COMMENT 1 - START -->
-                    <div class="media">
-                        <img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-                        <div class="media-body">
-                            <h4 class="media-heading">John Doe</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            <ul class="list-unstyled list-inline media-detail pull-left">
-                                <li><i class="fa fa-calendar"></i>27/02/2014</li>
-                                <li><i class="fa fa-thumbs-up"></i>13</li>
-                            </ul>
-                            <ul class="list-unstyled list-inline media-detail pull-right">
-                                <li class=""><a href="">Like</a></li>
-                                <li class=""><a href="">Reply</a></li>
-                            </ul>
+                    {% for text in reviews %}
+                        <div class="media">
+                            <div class="d-flex flex-row">
+                                <div class="flex-col">
+                                    <img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" style="margin: 10px;">
+                                </div>
+                                <div class="col">
+                                    <div class="media-body">
+                                        <h4 class="media-heading">{{text.user}}</h4>
+                                        <div>
+                                            ⭐{{text.rating}}
+                                        </div>
+                                        <p>{{text.text_field}}</p>
+                                        <ul class="list-unstyled list-inline media-detail pull-left">
+                                            <li><i class="fa fa-calendar"></i>{{text.date}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </div>
-                    </div>
+                    {% endfor %}
                     <!-- COMMENT 1 - END -->
                 </div>
             </div>
