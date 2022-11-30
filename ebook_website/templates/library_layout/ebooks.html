@@ -1,30 +1,32 @@
 {% extends 'library_layout/base.html' %}
 
 {% block body_block %}
-    <div class="center" style="max-height: 700px;overflow:auto; border-style: outset;">
+    <div class="center" style="border-style: outset;">
         <div style="border-style: outset;">
             <h1>books</h1>
         </div>
-        {% if book_records %}
-            <table class="table border-dark table-hover background-table">
-                <thead>
-                    <th scope="col"><h5>title</h5></th>
-                    <th scope="col"><h5>author</h5></th>
-                    <th scope="col"><h5>year published</h5></th>
-                </thead>
-                <tbody>
-                {% for book in book_records %}
-                    <tr>
-                        <td><b><a href="{% url 'library_layout:book_profile' book.name %}">{{ book.name }}</a></b></td>
-                        <td><b><a href="{% url 'library_layout:author_profile' book.author %}">{{ book.author }}</a></b></td>
-                        <td><b>{{ book.year_published }}</b></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-        <p>no ebooks in database</p>
-        {% endif %}
+        <div style="max-height: 700px;overflow:auto;">
+            {% if book_records %}
+                <table class="table border-dark table-hover background-table">
+                    <thead>
+                        <th scope="col"><h5>title</h5></th>
+                        <th scope="col"><h5>author</h5></th>
+                        <th scope="col"><h5>year published</h5></th>
+                    </thead>
+                    <tbody>
+                    {% for book in book_records %}
+                        <tr>
+                            <td><b><a href="{% url 'library_layout:book_profile' book.name %}">{{ book.name }}</a></b></td>
+                            <td><b><a href="{% url 'library_layout:author_profile' book.author %}">{{ book.author }}</a></b></td>
+                            <td><b>{{ book.year_published }}</b></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+            <p>no ebooks in database</p>
+            {% endif %}
+        </div>
     </div>
 
 {% endblock %}

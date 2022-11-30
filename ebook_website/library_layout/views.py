@@ -6,7 +6,6 @@ from django.contrib.auth import authenticate,login,logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 
 import random
 
@@ -97,6 +96,10 @@ def index(request):
     ebook_list = ebook.objects.order_by('id')
     items_dict = {'book_records':ebook_list,'author_records':author_list}
     return render(request,'library_layout/index.html',context=items_dict)
+
+@login_required
+def loan_book(bookname,loan_type):
+    pass
 
 def book_profile(request, bookname, ratefilter=False):
     if request.method == "POST":
