@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from library_layout.forms import UserForm, ReviewForm
 from library_layout.models import author, ebook, loan, review
 
@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 import random
+import datetime
 
 # Create your views here.
 
@@ -97,9 +98,19 @@ def index(request):
     items_dict = {'book_records':ebook_list,'author_records':author_list}
     return render(request,'library_layout/index.html',context=items_dict)
 
+#move to book_profile post request
 @login_required
-def loan_book(bookname,loan_type):
-    pass
+def loan_book(request,bookname,loan_type):
+    if int(loan_type) == 2:
+        loan_delete = datetime.date.today() + datetime.timedelta(days=7)
+    elif int(loan_type) == 3:
+        loan_delete = datetime.date.today() + datetime.timedelta(days=3)
+    else:
+        loan_delete = datetime.date.today() + datetime.timedelta(days=14)
+    ebookdata = ebook.objects.get(name=bookname)
+    loan.objects.get_or_create(user=request.user,ebook=ebookdata,loan_date=datetime.date.today(),loan_delete=loan_delete)
+    bookname = bookname.replace(' ','%20')
+    return redirect("index")
 
 def book_profile(request, bookname, ratefilter=False):
     if request.method == "POST":
