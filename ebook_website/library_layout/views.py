@@ -110,7 +110,7 @@ def loan_book(request,bookname,loan_type):
     ebookdata = ebook.objects.get(name=bookname)
     loan.objects.get_or_create(user=request.user,ebook=ebookdata,loan_date=datetime.date.today(),loan_delete=loan_delete)
     bookname = bookname.replace(' ','%20')
-    return redirect("index")
+    return redirect(f"/library/book_profile/{bookname}/")
 
 def book_profile(request, bookname, ratefilter=False):
     if request.method == "POST":
@@ -131,8 +131,14 @@ def book_profile(request, bookname, ratefilter=False):
     else:
         reviews = review.objects.filter(ebook=book_info).order_by('-date')
 
+    loaned = False
+    loans = loan.objects.filter(user=request.user,ebook=book_info)
+    if len(loans) != 0:
+        loans = loans[0]
+        loaned = True
+
     review_form = ReviewForm()
-    info_dict = {'book_info':book_info,'random':random.randint(0,300),"review_form":review_form,"reviews":reviews,"reviews_amount":len(reviews),}
+    info_dict = {'book_info':book_info,'random':random.randint(0,300),"review_form":review_form,"reviews":reviews,"reviews_amount":len(reviews),"loaned":loaned,"loans":loans}
     return render(request, 'library_layout/book_profile.html',context=info_dict)
 
 def author_profile(request, authorname):

@@ -17,7 +17,7 @@ table, th, td {
     background-image: url("../images/20603977_background3.jpg");
     height: 100%;
     background-position: center;
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat; */
     background-size: cover;
   }
 

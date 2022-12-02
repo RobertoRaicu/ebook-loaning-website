@@ -7,14 +7,18 @@
     <img src="https://picsum.photos/id/{{random}}/500/281" alt="">
     <br>
     {% if user.is_authenticated %}
-        <p><a class="btn btn-danger" href="{% url 'library_layout:loan_book' book_info.name book_info.loan_type %}" role="button">Save</a>
-        {% if book_info.loan_type == 3 %}
-            can be saved for up to 3 days
-        {% elif book_info.loan_type == 2 %}
-            can be saved for up to 7 days
+        {% if loaned %}
+            <p class="badge bg-secondary" style="--bs-text-opacity: .5;">book saved in you library until: {{loans.loan_delete}}</p>
         {% else %}
-            can be saved for up to 14 days
-        {% endif %}</p>
+            <p><a class="btn btn-danger" href="{% url 'library_layout:loan_book' book_info.name book_info.loan_type %}" role="button">Save</a>
+            {% if book_info.loan_type == 3 %}
+                can be saved for up to 3 days
+            {% elif book_info.loan_type == 2 %}
+                can be saved for up to 7 days
+            {% else %}
+                can be saved for up to 14 days
+            {% endif %}</p>
+        {% endif %}
     {% endif %}
         <p><h4><a href="#reviews" >{{reviews_amount}}  reviews</a></h4></p>
     <div style="max-width: 1000px;background-color: rgb(255, 255, 255,.5);">
