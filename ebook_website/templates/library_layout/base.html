@@ -31,13 +31,6 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        {% if user.is_authenticated %}
-                            <a class="navbar-link btn btn-danger" href="{% url 'library_layout:user_logout' %}" role="button">Logout</a>
-                        {% else %}
-                            <a class="navbar-link btn btn-success" href="{% url 'library_layout:user_login' %}" role="button">Login</a>
-                        {% endif %}
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link active" href="{% url 'library_layout:display_books' %}">Books</a>
                     </li>
                     <li class="nav-item">
@@ -46,6 +39,18 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="{% url 'library_layout:register' %}">Register</a>
                     </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'library_layout:user_profile' %}">profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="navbar-link btn btn-danger" href="{% url 'library_layout:user_logout' %}" role="button">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="navbar-link btn btn-success" href="{% url 'library_layout:user_login' %}" role="button">Login</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <!-- search bar -->
                 <form action="{% url 'library_layout:display_books' %}" class="d-flex" role="search" method="post">

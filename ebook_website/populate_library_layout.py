@@ -12,6 +12,10 @@ import random
 
 fake = Faker()
 
+'''it is advised to first create one or more users before running this script.
+   running this script without users data will result in generation of fake books without fake reviews
+   as well as display a "population failed" error!'''
+
 def populate_authors(n=3):
     for i in range(n):
         #author

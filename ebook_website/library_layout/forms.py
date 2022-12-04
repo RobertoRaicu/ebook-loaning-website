@@ -14,9 +14,8 @@ class UserForm(forms.ModelForm):
 
     class Meta():
         model = User
-        fields = ("username","email","password")
+        fields = ("username","password")
 
-    #validation error showing up only in terminal and not on page (HELP!!!)
     def clean(self):
         all_clean_data = super().clean()
         password = all_clean_data['password']

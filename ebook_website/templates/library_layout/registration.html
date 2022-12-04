@@ -10,7 +10,6 @@
           <h1>Thank you for registering!</h1>
         {% else %}
           <h1>Register Here</h1>
-          <h3>Just fill out the form.</h3>
           {% for field, errors in user_form.errors.items %}
             {% for error in errors %}
               {{ error }}
@@ -23,12 +22,6 @@
               <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label>
               <div class="col-sm-10">
                 {{ user_form.username }}
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-              <div class="col-sm-10">
-                {{ user_form.email }}
               </div>
             </div>
             <div class="row mb-3">

@@ -132,7 +132,10 @@ def book_profile(request, bookname, ratefilter=False):
         reviews = review.objects.filter(ebook=book_info).order_by('-date')
 
     loaned = False
-    loans = loan.objects.filter(user=request.user,ebook=book_info)
+    try:
+        loans = loan.objects.filter(user=request.user,ebook=book_info)
+    except:
+        loans = []
     if len(loans) != 0:
         loans = loans[0]
         loaned = True
@@ -147,4 +150,11 @@ def author_profile(request, authorname):
     info_dict = {'author_info':author_info,'book_info':book_info}
     return render(request, 'library_layout/author_profile.html',context=info_dict)
 
+@login_required
+def user_profile(request):
 
+    user_info = request.user
+    user_loans = loan.objects.filter(user=user_info)
+    user_reviews = review.objects.filter(user=user_info)
+    user_dict = {'userinfo':user_info,'userloans':user_loans,'userreviews':user_reviews}
+    return render(request, 'library_layout/user_profile.html',context=user_dict)
