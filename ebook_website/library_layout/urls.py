@@ -27,9 +27,14 @@ urlpatterns = [
     path('authors', views.display_authors, name='display_authors'),
     path('book_profile/<bookname>/', views.book_profile, name='book_profile'),
     path('book_profile/<bookname>/<ratefilter>', views.book_profile, name='book_profile'),
+    path('deletereview/<bookname>/',views.delete_review,name='delete_review'),
+    path('updatereview/<review_id>',views.update_review,name='update_review'),
     path('loanbook/<bookname>/<loan_type>', views.loan_book, name='loan_book'),
+    path('deleteloan/<bookname>/',views.delete_loan,name='delete_loan'),
     path('author/<authorname>', views.author_profile, name='author_profile'),
-    path('profile', views.user_profile, name='user_profile')
+    path('profile', views.user_profile, name='user_profile'),
+    path('userdelete', views.delete_user, name='delete_user'),
+
 
     
 ]

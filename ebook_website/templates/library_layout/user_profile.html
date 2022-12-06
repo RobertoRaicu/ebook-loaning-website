@@ -18,7 +18,7 @@
                         <a class="list-group-item list-group-item-action list-group-item-info" id="list-messages-list"
                             data-bs-toggle="list" href="#profile-update" role="tab" aria-controls="list-messages">Update
                             profile</a>
-                        <a href="https://google.com"
+                        <a href="{% url 'library_layout:delete_user'%}"
                             class="list-group-item list-group-item-action list-group-item-danger">delete account</a>
                     </div>
                 </div>
@@ -28,53 +28,68 @@
             <div class="card" style="background: rgb(255, 255, 255,.5); height: 600px; overflow: auto;">
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="loans" role="tabpanel" aria-labelledby="list-home-list">
-                        loans
                         <div class="row">
-                            {% for loan in userloans %}
-                                <div class="col-6">
-                                    <div class="card mb-3" style="max-width: 540px;">
-                                        <div class="row g-0">
-                                            <div class="col-md-4">
-                                                <img src="..." class="img-fluid rounded-start" alt="...">
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Card title</h5>
-                                                    <p class="card-text">This is a wider card with supporting text below as
-                                                        a natural lead-in to additional content. This content is a little
-                                                        bit longer.</p>
-                                                    <p class="card-text"><small class="text-muted">Last updated 3 mins
-                                                            ago</small></p>
-                                                </div>
-                                            </div>
+                            {% if loans %}
+                                <p class="badge text-dark fs-4">You haven't saved any books!</p>
+                            {% else %}
+                                {% for loan in userloans %}
+                                <div class="col-6" style="padding: 12px;">
+                                    <div class="card" style="max-width: 540px; min-height: 250px; background: rgb(255, 255, 255,.7);">
+                                        <div class="card-header">
+                                            <h5 class="card-title"><a href="{% url 'library_layout:book_profile' loan.ebook %}">{{loan.ebook}}</a></h5>
+                                        </div>
+                                        <div class="card-body d-flex flex-column">
+                                            <p class="card-text">Loan will be removed from your library on: {{loan.loan_delete}}</p>
+                                            <a href="{% url 'library_layout:delete_loan' loan.ebook %}" class="btn btn-danger mt-auto">delete loan</a>
+                                        </div>
+                                        <div class="card-footer">
+                                            <p class="card-text"><small class="text-muted">date saved: {{loan.loan_date}}</small></p>
                                         </div>
                                     </div>
                                 </div>
-                            {% endfor %}
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                     <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="list-profile-list">
-                        reviews
                         <div class="row">
-                            {% for review in userreviews %}
-                                <div class="col-6">
-                                    <div class="card mb-3" style="max-width: 540px;">
-                                        <div class="row g-0">
-                                            <div class="col-md-4">
-                                                <img src="https://api.lorem.space/image/book?w=150&h=220" class="img-fluid rounded-start" alt="...">
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{review.ebook}}</h5>
-                                                    <p class="card-text">{{review.text_field}}</p>
-                                                    <p class="card-text"><small class="text-muted">Last updated 3 mins
-                                                            ago</small></p>
+                            {% if reviews %}
+                                <p class="badge text-dark fs-4">You haven't reviewed any books!</p>
+                            {% else %}
+                                {% for review in userreviews %}
+                                <div class="col-6" style="padding: 12px;">
+                                    <div class="card" style="max-width: 540px; min-height: 300px; background: rgb(255, 255, 255,.7);">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h5 class="card-title"><a href="{% url 'library_layout:book_profile' review.ebook %}">{{review.ebook}}</a></h5>
+                                                </div>
+                                                <div class="col text-end">
+                                                    <p>⭐{{review.rating}}</p>
                                                 </div>
                                             </div>
+                                            
+                                        </div>
+                                        <div class="card-body d-flex flex-column">
+                                            <p class="card-text">{{review.text_field}}</p>
+                                            
+                                            <div class="row mt-auto">
+                                                <div class="col-6 d-grid gap-2">
+                                                    <a href="{% url 'library_layout:update_review' review.id %}" class="btn btn-outline-info">edit</a>
+                                                </div>
+                                                <div class="col-6 d-grid gap-2">
+                                                    <a href="{% url 'library_layout:delete_review' review.ebook %}" class="btn btn-danger">delete</a>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="card-footer">
+                                            <p class="card-text"><small class="text-muted">posted on: {{review.date}}</small></p>
                                         </div>
                                     </div>
                                 </div>
-                            {% endfor %}
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                     <div class="tab-pane fade" id="profile-update" role="tabpanel" aria-labelledby="list-messages-list">
