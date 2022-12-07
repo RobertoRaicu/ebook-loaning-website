@@ -78,7 +78,7 @@
                                                     <a href="{% url 'library_layout:update_review' review.id %}" class="btn btn-outline-info">edit</a>
                                                 </div>
                                                 <div class="col-6 d-grid gap-2">
-                                                    <a href="{% url 'library_layout:delete_review' review.ebook %}" class="btn btn-danger">delete</a>
+                                                    <a href="{% url 'library_layout:delete_review' review.id %}" class="btn btn-danger">delete</a>
                                                 </div>
                                             </div>
                                             
@@ -93,7 +93,44 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="profile-update" role="tabpanel" aria-labelledby="list-messages-list">
-                        update form
+                        <div class="container">
+                            <div class="jumbotron">
+                                {% if updated %}
+                                  <h1>Profile updated!</h1>
+                                {% else %}
+                                  <h1>Update your information below</h1>
+                                  {% for field, errors in user_form.errors.items %}
+                                    {% for error in errors %}
+                                      {{ error }}
+                                    {% endfor %}
+                                  {% endfor %}
+                        
+                                  <form enctype="multipart/form-data" method="POST">
+                                    {% csrf_token %}
+                                    <div class="row mb-3">
+                                      <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label>
+                                      <div class="col-sm-10">
+                                        {{ user_form.username }}
+                                      </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                      <label for="inputEmail3" class="col-sm-2 col-form-label">password</label>
+                                      <div class="col-sm-10">
+                                        {{ user_form.password }}
+                                      </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                      <label for="inputEmail3" class="col-sm-2 col-form-label">password veriffication</label>
+                                      <div class="col-sm-10">
+                                        {{ user_form.verify_pass }}
+                                      </div>
+                                    </div>
+                                    <input type="submit" name="" value="Register">
+                                  </form>
+                        
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

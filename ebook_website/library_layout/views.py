@@ -92,6 +92,14 @@ def display_authors(request):
         return render(request,'library_layout/authors.html',context=authors_dict)
 
 def index(request):
+    try:
+        loans = loan.objects.filter(user=request.user)
+        for i in loans:
+            if i.loan_delete < datetime.date.today():
+                loan.objects.filter(id=i.id).delete()
+    except:
+        pass
+
     author_list = author.objects.order_by('name')
     ebook_list = ebook.objects.order_by('id')
     items_dict = {'book_records':ebook_list,'author_records':author_list}
@@ -138,8 +146,16 @@ def book_profile(request, bookname, ratefilter=False):
         loans = loans[0]
         loaned = True
 
+    rating_sum = (0)
+    for i in reviews:
+        rating_sum += i.rating
+    try:
+        rating_avg = round(rating_sum / len(reviews),2)
+    except:
+        rating_avg = 0
+
     review_form = ReviewForm()
-    info_dict = {'book_info':book_info,'random':random.randint(0,300),"review_form":review_form,"reviews":reviews,"reviews_amount":len(reviews),"loaned":loaned,"loans":loans}
+    info_dict = {'book_info':book_info,'random':random.randint(0,300),"review_form":review_form,"reviews":reviews,"reviews_amount":len(reviews),"loaned":loaned,"loans":loans,'rating_avg':rating_avg}
     return render(request, 'library_layout/book_profile.html',context=info_dict)
 
 def author_profile(request, authorname):
@@ -152,12 +168,28 @@ def author_profile(request, authorname):
 def user_profile(request):
     emptyloan = False
     emptyreview = False
+    updated = False
     user_info = request.user
+
+    if request.method == 'POST':
+        user_form = UserForm(data=request.POST, instance=user_info)
+        if user_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+            updated = True
+
+    user_form = UserForm()
+
     user_loans = loan.objects.filter(user=user_info)
+    for i in user_loans:
+        if i.loan_delete < datetime.date.today():
+            loan.objects.filter(id=i.id).delete()
     if len(user_loans) == 0: emptyloan = True
     user_reviews = review.objects.filter(user=user_info)
     if len(user_reviews) == 0:  emptyreview = True
-    user_dict = {'userinfo':user_info,'userloans':user_loans,'userreviews':user_reviews,'loans':emptyloan,'reviews':emptyreview}
+
+    user_dict = {'userinfo':user_info,'userloans':user_loans,'userreviews':user_reviews,'loans':emptyloan,'reviews':emptyreview,'user_form':user_form,'updated':updated}
     return render(request, 'library_layout/user_profile.html',context=user_dict)
 
 @login_required
@@ -167,10 +199,9 @@ def delete_loan(request, bookname):
     return redirect('/library/profile')
 
 @login_required
-def delete_review(request,bookname):
-    bookname = ebook.objects.get(name=bookname)
-    review.objects.filter(user=request.user,ebook=bookname).delete()
-    return redirect('/library/profile')
+def delete_review(request,review_id):
+    review.objects.filter(id=review_id).delete()
+    return redirect(request. META['HTTP_REFERER'])
 
 @login_required
 def update_review(request,review_id):

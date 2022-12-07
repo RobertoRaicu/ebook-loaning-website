@@ -77,8 +77,6 @@ if __name__ == '__main__':
     book_populate = populate_books(200)
     review_populate = populate_reviews(700)
 
-    if book_populate and author_populate and review_populate:
-        print("population complete")
-    else:
-        print("population failed")
+    
+    print("script complete")
         

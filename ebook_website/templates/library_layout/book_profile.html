@@ -20,7 +20,7 @@
             {% endif %}</p>
         {% endif %}
     {% endif %}
-        <p><h4><a href="#reviews" >{{reviews_amount}}  reviews</a></h4></p>
+        <p><h4><a href="#reviews" >{{reviews_amount}}  reviews | average ratings: ⭐{{rating_avg}}</a></h4></p>
     <div style="max-width: 1000px;background-color: rgb(255, 255, 255,.5);">
         {{book_info.ebook_content}}
     </div>
@@ -112,8 +112,12 @@
                                         <ul class="list-unstyled list-inline media-detail pull-left">
                                             <li><i class="fa fa-calendar"></i>{{text.date}}</li>
                                         </ul>
+                                        
                                     </div>
                                 </div>
+                                {% if user.is_staff %}
+                                <a href="{% url 'library_layout:delete_review' text.id %}" class="btn btn-danger" style="height: 38px;">delete</a>
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}
