@@ -1,0 +1,82 @@
+{% extends 'library_layout/base.html' %}
+{% block body_block %}
+
+<div class="container-fluid">
+    {% if update %}
+    <div class="row">
+    {% endif %}    
+        <div class="col-6">
+        
+            <div class="jumbotron">
+            {% if added %}
+                <h1>book added!</h1>
+            {% else %}
+                
+                {% if add_isnt_valid %}
+                <h4 class="badge bg-secondary">book not saved | something went wrong</h4>
+                {% elif updt_isnt_valid %}
+                <h4 class="badge bg-secondary">Fields not changed | change at least one field to proceed!</h4>
+                {% endif %}
+                {% if update %}
+                <form action="{% url 'library_layout:update_book' book.id %}" method="post">
+                    <h2>Update details bellow</h2>
+                {% else %}
+                <form action="{% url 'library_layout:add_book'%}" method="post">
+                    <h2>Add new book</h2>
+                {% endif %}
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Title:</label>
+                        <div class="col-sm-10">
+                            {{ ebook_form.name }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Author:</label>
+                        <div class="col-sm-10">
+                            {{ ebook_form.author }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">year published:</label>
+                        <div class="col-sm-10">
+                            {{ ebook_form.year_published }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Loan duration:</label>
+                        <div class="col-sm-10">
+                            {{ ebook_form.loan_type }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Book content:</label>
+                        <div class="col-sm-10">
+                            {{ ebook_form.ebook_content }}
+                        </div>
+                    </div>
+                    {% if update %}
+                    <input type="submit" value="update">
+                    {% else %}
+                    <input type="submit" value="publish">
+                    {% endif %}
+                </form>
+            {% endif %}
+            </div>
+        </div>
+        {% if update %}
+        <div class="col-6">
+            <p><h1 class="fw-bolder mb-1">{{book.name}}</h1></p>
+            <p><h5 class="text-secondary">by<a href="{% url 'library_layout:author_profile' book.author %}" class="text-secondary"> {{book.author}}</a></h5></p>
+            <p class="text-secondary">published: {{book.year_published}}</p>
+            <img src="https://picsum.photos/id/{{random}}/500/281" alt="">
+            <br>
+            <div style="max-width: 1000px;background-color: rgb(255, 255, 255,.5);">
+                {{book.ebook_content}}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

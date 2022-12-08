@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-from library_layout.forms import UserForm, ReviewForm
+from library_layout.forms import UserForm, ReviewForm, EbookForm
 from library_layout.models import author, ebook, loan, review
 
 from django.contrib.auth import authenticate,login,logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 import random
 import datetime
@@ -225,3 +226,38 @@ def delete_user(request):
             user.delete()
             return redirect('index')
     return render(request, 'library_layout/user_delete.html')
+
+@staff_member_required
+def add_book(request):
+    added = False
+    add_isnt_valid = False
+    if request.method == 'POST':
+        ebook_form = EbookForm(data=request.POST)
+        if ebook_form.is_valid():
+            ebook_form.save()
+            added = True
+        else:
+            isnt_valid = True
+    ebook_form = EbookForm()
+    return render(request, 'library_layout/add_book.html',{'ebook_form':ebook_form,'add_isnt_valid':add_isnt_valid,"added":added,'update':False})
+
+@staff_member_required
+def update_book(request, book_id):
+    updt_isnt_valid = False
+    book = ebook.objects.get(id=book_id)
+
+    if request.method == 'POST':
+        ebook_form = EbookForm(request.POST, instance=book)
+        if ebook_form.is_valid():
+            ebook_form.save()
+            return redirect(f'/library/book_profile/{book.name}')
+        else:
+            updt_isnt_valid = True
+
+    ebook_form = EbookForm()
+    return render(request, 'library_layout/add_book.html',{'ebook_form':ebook_form,'updt_isnt_valid':updt_isnt_valid,'update':True,'book':book})
+
+@staff_member_required
+def delete_book(request,book_id):
+    ebook.objects.filter(id=book_id).delete()
+    return redirect('index')
