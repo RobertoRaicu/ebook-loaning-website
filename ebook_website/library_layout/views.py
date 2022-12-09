@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from library_layout.forms import UserForm, ReviewForm, EbookForm
+from library_layout.forms import UserForm, ReviewForm, EbookForm,AuthorForm
 from library_layout.models import author, ebook, loan, review
 
 from django.contrib.auth import authenticate,login,logout
@@ -169,7 +169,6 @@ def author_profile(request, authorname):
 def user_profile(request):
     emptyloan = False
     emptyreview = False
-    updated = False
     user_info = request.user
 
     if request.method == 'POST':
@@ -178,7 +177,7 @@ def user_profile(request):
             user = user_form.save()
             user.set_password(user.password)
             user.save()
-            updated = True
+            return HttpResponseRedirect(reverse('index'))
 
     user_form = UserForm()
 
@@ -190,7 +189,7 @@ def user_profile(request):
     user_reviews = review.objects.filter(user=user_info)
     if len(user_reviews) == 0:  emptyreview = True
 
-    user_dict = {'userinfo':user_info,'userloans':user_loans,'userreviews':user_reviews,'loans':emptyloan,'reviews':emptyreview,'user_form':user_form,'updated':updated}
+    user_dict = {'userinfo':user_info,'userloans':user_loans,'userreviews':user_reviews,'loans':emptyloan,'reviews':emptyreview,'user_form':user_form,}
     return render(request, 'library_layout/user_profile.html',context=user_dict)
 
 @login_required
@@ -237,7 +236,7 @@ def add_book(request):
             ebook_form.save()
             added = True
         else:
-            isnt_valid = True
+            add_isnt_valid = True
     ebook_form = EbookForm()
     return render(request, 'library_layout/add_book.html',{'ebook_form':ebook_form,'add_isnt_valid':add_isnt_valid,"added":added,'update':False})
 
@@ -261,3 +260,51 @@ def update_book(request, book_id):
 def delete_book(request,book_id):
     ebook.objects.filter(id=book_id).delete()
     return redirect('index')
+
+@staff_member_required
+def add_author(request):
+    added = False
+    isnt_valid = False
+    if request.method == 'POST':
+        author_form = AuthorForm(data=request.POST)
+        if author_form.is_valid():
+            author_form.save()
+            added = True
+        else:
+            isnt_valid = True
+    author_form = AuthorForm()
+    return render(request, 'library_layout/add_author.html',{'author_form':author_form,'isnt_valid':isnt_valid,"added":added,'update':False})
+
+@staff_member_required
+def update_author(request, author_id):
+    isnt_valid = False
+    authors = author.objects.get(id=author_id)
+    books = ebook.objects.filter(author=authors)
+
+    if request.method == 'POST':
+        author_form = AuthorForm(request.POST, instance=authors)
+        if author_form.is_valid():
+            author_form.save()
+            return redirect(f'/library/author/{authors.name}')
+        else:
+            isnt_valid = True
+
+    author_form = AuthorForm(instance=authors)
+    return render(request, 'library_layout/add_author.html',{'author_form':author_form,'isnt_valid':isnt_valid,'update':True,'authors':authors,'books':books})
+
+@staff_member_required
+def delete_author(request,author_id):
+    if request.method == 'POST':
+        value = request.POST.get('button')
+        if value == "abort":
+            return redirect('index')
+        elif value == "delete":
+            author.objects.filter(id=author_id).delete()
+            return redirect('index')
+    authors = author.objects.get(id=author_id)
+    return render(request, 'library_layout/author_delete.html',{'author':authors})
+
+def terms(request):
+    return render(request,'library_layout/terms.html')
+
+

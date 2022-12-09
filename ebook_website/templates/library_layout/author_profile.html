@@ -1,15 +1,23 @@
 {% extends 'library_layout/base.html' %}
 {% block body_block %}
-{% load static %}
+
 <div class="center" style="border: 3px solid black; max-width: 450px;">
     <div class="row" style="border: 3px solid black;">
         <div class="col-sm-6 col-md-4">
-            <img src="https://api.lorem.space/image/face?w=140&h=210" width="140" height="210" alt="" class="img-rounded img-responsive" />
+            <img src="https://api.lorem.space/image/face?w=140&h=210" width="140" height="210" alt=""
+                class="img-rounded img-responsive" />
         </div>
-        <div class="col-sm-6 col-md-8">
+        <div class="col-sm-6 col-md-8 d-flex flex-column">
             <h4>{{author_info.name}}</h4>
             <small><cite>{{author_info.nationality}}</cite></small>
             <small>date of birth: <cite>{{author_info.birth_year}}</cite></small>
+            {% if user.is_staff %}
+            <div class="mt-auto" style="margin: 10px;">
+                <a href="{% url 'library_layout:update_author' author_info.id %}" class="btn btn-info">update author</a>
+                <a href="{% url 'library_layout:delete_author' author_info.id %}" class="btn btn-danger">delete
+                    author</a>
+            </div>
+            {% endif %}
         </div>
     </div>
     <div style="max-height: 400px;overflow:auto;">
@@ -21,10 +29,10 @@
             </thead>
             <tbody>
                 {% for book in book_info %}
-                    <tr>
-                        <td><a href="{% url 'library_layout:book_profile' book.name %}">{{book.name}}</a></td>
-                        <td>{{book.year_published}}</td>
-                    </tr>
+                <tr>
+                    <td><a href="{% url 'library_layout:book_profile' book.name %}">{{book.name}}</a></td>
+                    <td>{{book.year_published}}</td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>

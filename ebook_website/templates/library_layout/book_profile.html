@@ -1,33 +1,43 @@
 {% extends 'library_layout/base.html' %}
 {% block body_block %}
+
 <div class="jumbotron book-display">
-    <p><h1 class="fw-bolder mb-1">{{book_info.name}}</h1></p>
-    <p><h5 class="text-secondary">by<a href="{% url 'library_layout:author_profile' book_info.author %}" class="text-secondary"> {{book_info.author}}</a></h5></p>
+    <p>
+    <h1 class="fw-bolder mb-1">{{book_info.name}}</h1>
+    </p>
+    <p>
+    <h5 class="text-secondary">by<a href="{% url 'library_layout:author_profile' book_info.author %}"
+            class="text-secondary"> {{book_info.author}}</a></h5>
+    </p>
     <p class="text-secondary">published: {{book_info.year_published}}</p>
     <img src="https://picsum.photos/id/{{random}}/500/281" alt="">
     <br>
     {% if user.is_staff %}
     <hr>
     <a class="btn btn-info" href="{% url 'library_layout:update_book' book_info.id %}">edit book</a> |
-    <a href="{% url 'library_layout:delete_book' book_info.id %}" class="btn btn-danger">delete</a>
+    <a href="{% url 'library_layout:delete_book' book_info.id %}" class="btn btn-danger">delete book</a>
     <hr>
     {% endif %}
     {% if user.is_authenticated %}
-        {% if loaned %}
-            <p class="badge bg-secondary" style="--bs-text-opacity: .5;">book saved in you library until: {{loans.loan_delete}}</p>
+    {% if loaned %}
+    <p class="badge bg-secondary" style="--bs-text-opacity: .5;">book saved in you library until: {{loans.loan_delete}}
+    </p>
+    {% else %}
+    <br>
+    <p><a class="btn btn-success" href="{% url 'library_layout:loan_book' book_info.name book_info.loan_type %}"
+            role="button">Save</a>
+        {% if book_info.loan_type == 3 %}
+        can be saved for up to 3 days
+        {% elif book_info.loan_type == 2 %}
+        can be saved for up to 7 days
         {% else %}
-        <br>
-            <p><a class="btn btn-success" href="{% url 'library_layout:loan_book' book_info.name book_info.loan_type %}" role="button">Save</a>
-            {% if book_info.loan_type == 3 %}
-                can be saved for up to 3 days
-            {% elif book_info.loan_type == 2 %}
-                can be saved for up to 7 days
-            {% else %}
-                can be saved for up to 14 days
-            {% endif %}</p>
-        {% endif %}
+        can be saved for up to 14 days
+        {% endif %}</p>
     {% endif %}
-        <p><h4><a href="#reviews" >{{reviews_amount}}  reviews | average ratings: ⭐{{rating_avg}}</a></h4></p>
+    {% endif %}
+    <p>
+    <h4><a href="#reviews">{{reviews_amount}} reviews | average ratings: ⭐{{rating_avg}}</a></h4>
+    </p>
     <div style="max-width: 1000px;background-color: rgb(255, 255, 255,.5);">
         {{book_info.ebook_content}}
     </div>
@@ -35,27 +45,34 @@
     <div class="row" id="reviews">
         <div class="col">
             filter by:
-            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name %}#reviews ">all</a>
-            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name 1 %}#reviews ">⭐ 1</a>
-            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name 2 %}#reviews ">⭐ 2</a>
-            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name 3 %}#reviews ">⭐ 3</a>
-            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name 4 %}#reviews ">⭐ 4</a>
-            <a class="btn btn-outline-secondary" href="{% url 'library_layout:book_profile' book_info.name 5 %}#reviews ">⭐ 5</a>
+            <a class="btn btn-outline-secondary"
+                href="{% url 'library_layout:book_profile' book_info.name %}#reviews ">all</a>
+            <a class="btn btn-outline-secondary"
+                href="{% url 'library_layout:book_profile' book_info.name 1 %}#reviews ">⭐ 1</a>
+            <a class="btn btn-outline-secondary"
+                href="{% url 'library_layout:book_profile' book_info.name 2 %}#reviews ">⭐ 2</a>
+            <a class="btn btn-outline-secondary"
+                href="{% url 'library_layout:book_profile' book_info.name 3 %}#reviews ">⭐ 3</a>
+            <a class="btn btn-outline-secondary"
+                href="{% url 'library_layout:book_profile' book_info.name 4 %}#reviews ">⭐ 4</a>
+            <a class="btn btn-outline-secondary"
+                href="{% url 'library_layout:book_profile' book_info.name 5 %}#reviews ">⭐ 5</a>
         </div>
     </div>
     </form>
     <section class="content-item" id="comments">
-        <div>   
+        <div>
             <div class="row">
-                <div class="col-sm-8">   
+                <div class="col-sm-8">
                     <form action="{% url 'library_layout:book_profile' book_info.name %}" method="POST">
                         {% csrf_token %}
                         <h3 class="pull-left">New review</h3>
-                        
+
                         <fieldset>
                             <div class="row">
                                 <div class="col-sm-3 col-lg-2 hidden-xs">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" style="max-height: 100px; max-width: 100px;">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt=""
+                                        style="max-height: 100px; max-width: 100px;">
                                 </div>
                                 <div class="form-group col-xs-12 col-sm-9 col-lg-10">
                                     {{review_form.text_field}}
@@ -64,26 +81,31 @@
                                             <label class="radio-inline">
                                                 rating: &nbsp;
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1" required>
+                                                    <input class="form-check-input" type="radio"
+                                                        name="inlineRadioOptions" id="inlineRadio1" value="1" required>
                                                     <label class="form-check-label" for="inlineRadio1">1</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="inlineRadioOptions" id="inlineRadio2" value="2">
                                                     <label class="form-check-label" for="inlineRadio2">2</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="3">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="inlineRadioOptions" id="inlineRadio1" value="3">
                                                     <label class="form-check-label" for="inlineRadio1">3</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="4">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="inlineRadioOptions" id="inlineRadio2" value="4">
                                                     <label class="form-check-label" for="inlineRadio2">4</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="5">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="inlineRadioOptions" id="inlineRadio2" value="5">
                                                     <label class="form-check-label" for="inlineRadio2">5</label>
                                                 </div>
-                                                
+
                                             </label>
                                         </div>
                                         <div class="col text-secondary">
@@ -91,42 +113,44 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>  	
+                            </div>
                         </fieldset>
                         {% if user.is_authenticated %}
-                            <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="submit" class="btn btn-success">Submit</button>
                         {% else %}
-                            <a class="btn btn-success" href="{% url 'library_layout:user_login' %}">Submit</a>
+                        <a class="btn btn-success" href="{% url 'library_layout:user_login' %}">Submit</a>
                         {% endif %}
                     </form>
-                    
+
                     <h3>{{reviews_amount}} Reviews</h3>
-                    
+
                     <!-- COMMENT 1 - START -->
                     {% for text in reviews %}
-                        <div class="media">
-                            <div class="d-flex flex-row">
-                                <div class="flex-col">
-                                    <img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" style="margin: 10px;">
-                                </div>
-                                <div class="col">
-                                    <div class="media-body">
-                                        <h4 class="media-heading">{{text.user}}</h4>
-                                        <div>
-                                            ⭐{{text.rating}}
-                                        </div>
-                                        <p>{{text.text_field}}</p>
-                                        <ul class="list-unstyled list-inline media-detail pull-left">
-                                            <li><i class="fa fa-calendar"></i>{{text.date}}</li>
-                                        </ul>
-                                        
-                                    </div>
-                                </div>
-                                {% if user.is_staff %}
-                                <a href="{% url 'library_layout:delete_review' text.id %}" class="btn btn-danger" style="height: 38px;">delete</a>
-                                {% endif %}
+                    <div class="media">
+                        <div class="d-flex flex-row">
+                            <div class="flex-col">
+                                <img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                                    alt="" style="margin: 10px;">
                             </div>
+                            <div class="col">
+                                <div class="media-body">
+                                    <h4 class="media-heading">{{text.user}}</h4>
+                                    <div>
+                                        ⭐{{text.rating}}
+                                    </div>
+                                    <p>{{text.text_field}}</p>
+                                    <ul class="list-unstyled list-inline media-detail pull-left">
+                                        <li><i class="fa fa-calendar"></i>{{text.date}}</li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                            {% if user.is_staff %}
+                            <a href="{% url 'library_layout:delete_review' text.id %}" class="btn btn-danger"
+                                style="height: 38px;">delete</a>
+                            {% endif %}
                         </div>
+                    </div>
                     {% endfor %}
                     <!-- COMMENT 1 - END -->
                 </div>

@@ -37,5 +37,10 @@ urlpatterns = [
     path('addbook/',views.add_book,name='add_book'),
     path('addbook/<book_id>',views.update_book,name='update_book'),
     path('deletebook/<book_id>/',views.delete_book,name='delete_book'),
+    path('addauthor/',views.add_author,name='add_author'),
+    path('addauthor/<author_id>/',views.update_author,name='update_author'),
+    path('deleteauthor/<author_id>/',views.delete_author,name='delete_author'),
+    path('tos/',views.terms,name='terms')
+    
 
 ]

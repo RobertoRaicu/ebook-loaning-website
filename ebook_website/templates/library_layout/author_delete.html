@@ -1,0 +1,27 @@
+{% extends 'library_layout/base.html' %}
+{% block body_block %}
+
+<div class="container">
+    <div class="card center d-flex flex-column"
+        style="background: rgba(216, 85, 85, 0.5);border: 3px solid red; height: 410px; width: 580px;">
+        <h1 class="text-center" style="font-size: 150px;">⚠️</h1>
+        <h3 class="text-center">are you sure you want to remove this author?<br>
+            <p class="text-secondary">⚠books under this author will be removed ⚠<br>⚠ this decision is irreversible ⚠
+            </p>
+        </h3>
+        <form action="{% url 'library_layout:delete_author' author.id %}" method="post">
+            {% csrf_token %}
+            <div class="row mt-auto">
+                <div class="col-6 d-grid gap-2">
+                    <!-- <input type="hidden" name="abort" value="abort"> -->
+                    <button type="submit" class="btn btn-info" name="button" value="abort">take me back</button>
+                </div>
+                <div class="col-6 d-grid gap-2">
+                    <button type="submit" class="btn btn-danger" name="button" value="delete">delete author</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

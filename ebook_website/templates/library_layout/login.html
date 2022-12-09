@@ -1,23 +1,24 @@
 {% extends 'library_layout/base.html' %}
 {% block body_block %}
-  <div class="container">
-    <div class="jumbotron">
-      <h1>Please Login</h1>
 
-        <form method="post" action="{% url 'library_layout:user_login' %}">
-          {% csrf_token %}
-          {# A more "HTML" way of creating the login form#}
-          <h3><span class="badge bg-secondary">{{error}}</span></h3>
-          <label for="username">Username:</label>
-          <input type="text" name="username" placeholder="Username">
+<div class="container">
+  <div class="jumbotron">
+    <h1>Please Login</h1>
 
-          <label for="password">password:</label>
-          <input type="password" name="password">
+    <form method="post" action="{% url 'library_layout:user_login' %}">
+      {% csrf_token %}
+      {# A more "HTML" way of creating the login form#}
+      <h3><span class="badge bg-secondary">{{error}}</span></h3>
+      <label for="username">Username:</label>
+      <input type="text" name="username" placeholder="Username">
 
-          <input type="submit" name="" value="Login">
+      <label for="password">password:</label>
+      <input type="password" name="password">
 
-        </form>
-        <a href="{% url 'library_layout:register' %}">no account?register here</a>
-    </div>
+      <input type="submit" name="" value="Login">
+
+    </form>
+    <a href="{% url 'library_layout:register' %}">no account?register here</a>
   </div>
+</div>
 {% endblock %}

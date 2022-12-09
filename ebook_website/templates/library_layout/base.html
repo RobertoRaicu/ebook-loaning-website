@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,7 +23,7 @@
                     class="d-inline-block align-text-top">
                 eLibrary
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -40,22 +41,25 @@
                         <a class="nav-link active" href="{% url 'library_layout:register' %}">Register</a>
                     </li>
                     {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{% url 'library_layout:user_profile' %}">Profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="navbar-link btn btn-danger" href="{% url 'library_layout:user_logout' %}" role="button">Logout</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'library_layout:user_profile' %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="navbar-link btn btn-danger" href="{% url 'library_layout:user_logout' %}"
+                            role="button">Logout</a>
+                    </li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="navbar-link btn btn-success" href="{% url 'library_layout:user_login' %}" role="button">Login</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="navbar-link btn btn-success" href="{% url 'library_layout:user_login' %}"
+                            role="button">Login</a>
+                    </li>
                     {% endif %}
                 </ul>
                 <!-- search bar -->
                 <form action="{% url 'library_layout:display_books' %}" class="d-flex" role="search" method="post">
                     {% csrf_token %}
-                    <input class="form-control me-2" type="search" placeholder="Search book" aria-label="Search" name="searched">
+                    <input class="form-control me-2" type="search" placeholder="Search book" aria-label="Search"
+                        name="searched">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
@@ -66,6 +70,13 @@
         {% block body_block %}
         {% endblock %}
     </div>
+
+    <footer>
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.1);">
+            2022 | Roberto Meer |
+            <a class="text-dark" href="{% url 'library_layout:terms' %}">Terms of Service</a>
+        </div>
+    </footer>
 
 </body>
 

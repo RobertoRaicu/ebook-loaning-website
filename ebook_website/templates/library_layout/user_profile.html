@@ -1,6 +1,6 @@
 {% extends 'library_layout/base.html' %}
 {% block body_block %}
-{% load static %}
+
 <div class="container center">
     <div class="row">
         <div class="col-6 col-md-4">
@@ -30,105 +30,113 @@
                     <div class="tab-pane fade show active" id="loans" role="tabpanel" aria-labelledby="list-home-list">
                         <div class="row">
                             {% if loans %}
-                                <p class="badge text-dark fs-4">You haven't saved any books!</p>
+                            <p class="badge text-dark fs-4">You haven't saved any books!</p>
                             {% else %}
-                                {% for loan in userloans %}
-                                <div class="col-6" style="padding: 12px;">
-                                    <div class="card" style="max-width: 540px; min-height: 250px; background: rgb(255, 255, 255,.7);">
-                                        <div class="card-header">
-                                            <h5 class="card-title"><a href="{% url 'library_layout:book_profile' loan.ebook %}">{{loan.ebook}}</a></h5>
-                                        </div>
-                                        <div class="card-body d-flex flex-column">
-                                            <p class="card-text">Loan will be removed from your library on: {{loan.loan_delete}}</p>
-                                            <a href="{% url 'library_layout:delete_loan' loan.ebook %}" class="btn btn-danger mt-auto">delete loan</a>
-                                        </div>
-                                        <div class="card-footer">
-                                            <p class="card-text"><small class="text-muted">date saved: {{loan.loan_date}}</small></p>
-                                        </div>
+                            {% for loan in userloans %}
+                            <div class="col-6" style="padding: 12px;">
+                                <div class="card"
+                                    style="max-width: 540px; min-height: 250px; background: rgb(255, 255, 255,.7);">
+                                    <div class="card-header">
+                                        <h5 class="card-title"><a
+                                                href="{% url 'library_layout:book_profile' loan.ebook %}">{{loan.ebook}}</a>
+                                        </h5>
+                                    </div>
+                                    <div class="card-body d-flex flex-column">
+                                        <p class="card-text">Loan will be removed from your library on:
+                                            {{loan.loan_delete}}</p>
+                                        <a href="{% url 'library_layout:delete_loan' loan.ebook %}"
+                                            class="btn btn-danger mt-auto">delete loan</a>
+                                    </div>
+                                    <div class="card-footer">
+                                        <p class="card-text"><small class="text-muted">date saved:
+                                                {{loan.loan_date}}</small></p>
                                     </div>
                                 </div>
-                                {% endfor %}
+                            </div>
+                            {% endfor %}
                             {% endif %}
                         </div>
                     </div>
                     <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="list-profile-list">
                         <div class="row">
                             {% if reviews %}
-                                <p class="badge text-dark fs-4">You haven't reviewed any books!</p>
+                            <p class="badge text-dark fs-4">You haven't reviewed any books!</p>
                             {% else %}
-                                {% for review in userreviews %}
-                                <div class="col-6" style="padding: 12px;">
-                                    <div class="card" style="max-width: 540px; min-height: 300px; background: rgb(255, 255, 255,.7);">
-                                        <div class="card-header">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <h5 class="card-title"><a href="{% url 'library_layout:book_profile' review.ebook %}">{{review.ebook}}</a></h5>
-                                                </div>
-                                                <div class="col text-end">
-                                                    <p>⭐{{review.rating}}</p>
-                                                </div>
+                            {% for review in userreviews %}
+                            <div class="col-6" style="padding: 12px;">
+                                <div class="card"
+                                    style="max-width: 540px; min-height: 300px; background: rgb(255, 255, 255,.7);">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h5 class="card-title"><a
+                                                        href="{% url 'library_layout:book_profile' review.ebook %}">{{review.ebook}}</a>
+                                                </h5>
                                             </div>
-                                            
-                                        </div>
-                                        <div class="card-body d-flex flex-column">
-                                            <p class="card-text">{{review.text_field}}</p>
-                                            
-                                            <div class="row mt-auto">
-                                                <div class="col-6 d-grid gap-2">
-                                                    <a href="{% url 'library_layout:update_review' review.id %}" class="btn btn-outline-info">edit</a>
-                                                </div>
-                                                <div class="col-6 d-grid gap-2">
-                                                    <a href="{% url 'library_layout:delete_review' review.id %}" class="btn btn-danger">delete</a>
-                                                </div>
+                                            <div class="col text-end">
+                                                <p>⭐{{review.rating}}</p>
                                             </div>
-                                            
                                         </div>
-                                        <div class="card-footer">
-                                            <p class="card-text"><small class="text-muted">posted on: {{review.date}}</small></p>
+
+                                    </div>
+                                    <div class="card-body d-flex flex-column">
+                                        <p class="card-text">{{review.text_field}}</p>
+
+                                        <div class="row mt-auto">
+                                            <div class="col-6 d-grid gap-2">
+                                                <a href="{% url 'library_layout:update_review' review.id %}"
+                                                    class="btn btn-outline-info">edit</a>
+                                            </div>
+                                            <div class="col-6 d-grid gap-2">
+                                                <a href="{% url 'library_layout:delete_review' review.id %}"
+                                                    class="btn btn-danger">delete</a>
+                                            </div>
                                         </div>
+
+                                    </div>
+                                    <div class="card-footer">
+                                        <p class="card-text"><small class="text-muted">posted on:
+                                                {{review.date}}</small></p>
                                     </div>
                                 </div>
-                                {% endfor %}
+                            </div>
+                            {% endfor %}
                             {% endif %}
                         </div>
                     </div>
                     <div class="tab-pane fade" id="profile-update" role="tabpanel" aria-labelledby="list-messages-list">
                         <div class="container">
                             <div class="jumbotron">
-                                {% if updated %}
-                                  <h1>Profile updated!</h1>
-                                {% else %}
-                                  <h1>Update your information below</h1>
-                                  {% for field, errors in user_form.errors.items %}
-                                    {% for error in errors %}
-                                      {{ error }}
-                                    {% endfor %}
-                                  {% endfor %}
-                        
-                                  <form enctype="multipart/form-data" method="POST">
+                                <h1>Update your information below</h1>
+                                {% for field, errors in user_form.errors.items %}
+                                {% for error in errors %}
+                                {{ error }}
+                                {% endfor %}
+                                {% endfor %}
+
+                                <form enctype="multipart/form-data" method="POST">
                                     {% csrf_token %}
                                     <div class="row mb-3">
-                                      <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label>
-                                      <div class="col-sm-10">
-                                        {{ user_form.username }}
-                                      </div>
+                                        <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label>
+                                        <div class="col-sm-10">
+                                            {{ user_form.username }}
+                                        </div>
                                     </div>
                                     <div class="row mb-3">
-                                      <label for="inputEmail3" class="col-sm-2 col-form-label">password</label>
-                                      <div class="col-sm-10">
-                                        {{ user_form.password }}
-                                      </div>
+                                        <label for="inputEmail3" class="col-sm-2 col-form-label">password</label>
+                                        <div class="col-sm-10">
+                                            {{ user_form.password }}
+                                        </div>
                                     </div>
                                     <div class="row mb-3">
-                                      <label for="inputEmail3" class="col-sm-2 col-form-label">password veriffication</label>
-                                      <div class="col-sm-10">
-                                        {{ user_form.verify_pass }}
-                                      </div>
+                                        <label for="inputEmail3" class="col-sm-2 col-form-label">password
+                                            veriffication</label>
+                                        <div class="col-sm-10">
+                                            {{ user_form.verify_pass }}
+                                        </div>
                                     </div>
                                     <input type="submit" name="" value="update">
-                                  </form>
-                        
-                                {% endif %}
+                                </form>
                             </div>
                         </div>
                     </div>

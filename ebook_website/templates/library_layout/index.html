@@ -1,61 +1,76 @@
 {% extends "library_layout/base.html" %}
 {% block body_block %}
-    <div class="container"  style="border-style: outset;">
-        <div class="row">
-            <div class="col" style="border-style: outset;">
-                <h1>books</h1>
-            </div>
-            <div class="col" style="border-style: outset;">
-                <h1>authors</h1>
-            </div>
+
+<div class="container" style="border-style: outset;">
+    <div class="row">
+        <div class="col" style="border-style: outset;">
+            <h1>books</h1>
         </div>
-        <br>
-        <div class="row">
-            <div class="col" style="max-height: 700px;overflow:auto;">
-                {% if book_records %}
-                    <table class="table border-dark table-hover background-table">
-                        <thead>
-                            <th scope="col"><h5>title</h5></th>
-                            <th scope="col"><h5>author</h5></th>
-                            <th scope="col"><h5>year published</h5></th>
-                        </thead>
-                        <tbody>
-                        {% for book in book_records %}
-                            <tr>
-                                <td><b><a href="{% url 'library_layout:book_profile' book.name %}">{{ book.name }}</a></b></td>
-                                <td><b><a href="{% url 'library_layout:author_profile' book.author %}">{{ book.author }}</a></b></td>
-                                <td><b>{{ book.year_published }}</b></td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                {% else %}
-                <p>no ebooks in database</p>
-                {% endif %}
-            </div>
-            <div class="col" style="max-height: 700px;overflow:auto;">
-                {% if author_records %}
-                    <table class="table border-dark table-hover background-table">
-                        <thead>
-                            <th scope="col"><h5>name</h5></th>
-                            <th scope="col"><h5>year of birth</h5></th>
-                            <th scope="col"><h5>nationality</h5></th>
-                        </thead>
-                        <tbody>
-                        {% for author in author_records %}
-                            <tr>
-                                <td><b><a href="{% url 'library_layout:author_profile' author.name %}">{{ author.name }}</a></b></td>
-                                <td><b>{{ author.birth_year }}</b></td>
-                                <td><b>{{ author.nationality }}</b></td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                {% else %}
-                <p>no authors in database</p>
-                {% endif %}
-            </div>
+        <div class="col" style="border-style: outset;">
+            <h1>authors</h1>
         </div>
     </div>
-    
+    <br>
+    <div class="row">
+        <div class="col" style="max-height: 700px;overflow:auto;">
+            {% if book_records %}
+            <table class="table border-dark table-hover background-table">
+                <thead>
+                    <th scope="col">
+                        <h5>title</h5>
+                    </th>
+                    <th scope="col">
+                        <h5>author</h5>
+                    </th>
+                    <th scope="col">
+                        <h5>year published</h5>
+                    </th>
+                </thead>
+                <tbody>
+                    {% for book in book_records %}
+                    <tr>
+                        <td><b><a href="{% url 'library_layout:book_profile' book.name %}">{{ book.name }}</a></b></td>
+                        <td><b><a href="{% url 'library_layout:author_profile' book.author %}">{{ book.author }}</a></b>
+                        </td>
+                        <td><b>{{ book.year_published }}</b></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>no ebooks in database</p>
+            {% endif %}
+        </div>
+        <div class="col" style="max-height: 700px;overflow:auto;">
+            {% if author_records %}
+            <table class="table border-dark table-hover background-table">
+                <thead>
+                    <th scope="col">
+                        <h5>name</h5>
+                    </th>
+                    <th scope="col">
+                        <h5>year of birth</h5>
+                    </th>
+                    <th scope="col">
+                        <h5>nationality</h5>
+                    </th>
+                </thead>
+                <tbody>
+                    {% for author in author_records %}
+                    <tr>
+                        <td><b><a href="{% url 'library_layout:author_profile' author.name %}">{{ author.name }}</a></b>
+                        </td>
+                        <td><b>{{ author.birth_year }}</b></td>
+                        <td><b>{{ author.nationality }}</b></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>no authors in database</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
 {% endblock %}

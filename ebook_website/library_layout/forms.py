@@ -52,5 +52,10 @@ class EbookForm(forms.ModelForm):
         model = ebook
         fields = '__all__'
 
+class AuthorForm(forms.ModelForm):
+    class Meta():
+        model = author
+        fields = '__all__'
+
 
     
