@@ -33,7 +33,7 @@ class ebook(models.Model):
 
     author = models.ForeignKey(author, on_delete=models.CASCADE)
 
-    year_published = models.IntegerField(max_length=64)
+    year_published = models.IntegerField()
 
     loan_type = models.IntegerField(default=1,
                                     validators=[

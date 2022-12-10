@@ -1,5 +1,12 @@
+html {
+	height: 100%;
+}
+
 body {
+	min-height: 100%;
 	font-family: sans-serif;
+	padding: 0px;
+	padding-bottom: 60px;
 }
 
 a {
@@ -20,11 +27,26 @@ td {
 }
 
 #bg {
-	background-image: url("../images/20603977_background3.jpg");
+	background-image: linear-gradient(to bottom right, #2b5876, #4e4376);
+	/* background-image: url("../images/20603977_background3.jpg"); */
 	height: 100%;
+	background-attachment: fixed;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
+}
+
+#footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 60px;
+	background: rgb(224, 11, 11);
+}
+
+.links:hover {
+	color: gray;
+	background-color: transparent;
 }
 
 .center {

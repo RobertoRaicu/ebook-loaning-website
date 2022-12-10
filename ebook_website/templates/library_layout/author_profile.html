@@ -9,8 +9,8 @@
         </div>
         <div class="col-sm-6 col-md-8 d-flex flex-column">
             <h4>{{author_info.name}}</h4>
-            <small><cite>{{author_info.nationality}}</cite></small>
-            <small>date of birth: <cite>{{author_info.birth_year}}</cite></small>
+            <small class="text-white-50"><cite>{{author_info.nationality}}</cite></small>
+            <small class="text-white-50">date of birth: <cite>{{author_info.birth_year}}</cite></small>
             {% if user.is_staff %}
             <div class="mt-auto" style="margin: 10px;">
                 <a href="{% url 'library_layout:update_author' author_info.id %}" class="btn btn-info">update author</a>
@@ -30,7 +30,7 @@
             <tbody>
                 {% for book in book_info %}
                 <tr>
-                    <td><a href="{% url 'library_layout:book_profile' book.name %}">{{book.name}}</a></td>
+                    <td><a href="{% url 'library_layout:book_profile' book.name %}" class="links">{{book.name}}</a></td>
                     <td>{{book.year_published}}</td>
                 </tr>
                 {% endfor %}
