@@ -14,35 +14,35 @@ import datetime
 # Create your views here.
 
 
-@login_required
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('index'))
+# index
+def index(request):
+    try:
+        loans = loan.objects.filter(user=request.user)
+        for i in loans:
+            if i.loan_delete < datetime.date.today():
+                loan.objects.filter(id=i.id).delete()
+    except:
+        pass
 
+    author_list = author.objects.order_by('name')
+    ebook_list = ebook.objects.order_by('id')
+    items_dict = {'book_records': ebook_list, 'author_records': author_list}
+    return render(request, 'library_layout/index.html', context=items_dict)
+# end of index
 
+# user login and registration
 def register(request):
-
     registered = False
 
     if request.method == 'POST':
-
         user_form = UserForm(data=request.POST)
 
         if user_form.is_valid():
-
             user = user_form.save()
-
             user.set_password(user.password)
-
             user.save()
-
             registered = True
-
-        else:
-            print(user_form.errors)
-            return render(request, 'library_layout/registration.html',
-                          {'user_form': user_form,
-                           'registered': registered, })
+            login(request, user)
 
     else:
         user_form = UserForm()
@@ -72,6 +72,65 @@ def user_login(request):
         return render(request, 'library_layout/login.html', {})
 
 
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
+# end of user login and registration
+
+# user settings
+@login_required
+def delete_user(request):
+    if request.method == 'POST':
+        value = request.POST.get('button')
+        if value == "abort":
+            return redirect('/library/profile')
+        elif value == "delete":
+            user = request.user
+            user.delete()
+            return redirect('index')
+    return render(request, 'library_layout/user_delete.html')
+
+
+@login_required
+def user_profile(request):
+    emptyloan = False
+    emptyreview = False
+    wrongpass = False
+    user_info = request.user
+
+    if request.method == 'POST':
+        user_form = UserForm(data=request.POST, instance=user_info)
+
+        password = request.POST.get('old_password')
+        user = authenticate(username=user_info, password=password)
+        if user:
+            if user_form.is_valid():
+                user = user_form.save()
+                user.set_password(user.password)
+                user.save()
+                return HttpResponseRedirect(reverse('index'))
+        else:
+            wrongpass = True
+
+    user_form = UserForm(instance=request.user)
+
+    user_loans = loan.objects.filter(user=user_info)
+    for i in user_loans:
+        if i.loan_delete < datetime.date.today():
+            loan.objects.filter(id=i.id).delete()
+    if len(user_loans) == 0:
+        emptyloan = True
+    user_reviews = review.objects.filter(user=user_info)
+    if len(user_reviews) == 0:
+        emptyreview = True
+
+    user_dict = {'userinfo': user_info, 'userloans': user_loans, 'userreviews': user_reviews,
+                 'loans': emptyloan, 'reviews': emptyreview, 'user_form': user_form, 'wrongpass': wrongpass}
+    return render(request, 'library_layout/user_profile.html', context=user_dict)
+# end of user settings
+
+# ebook views
 def display_books(request):
     if request.method == "POST":
         search = request.POST.get('searched')
@@ -82,48 +141,6 @@ def display_books(request):
         ebook_list = ebook.objects.order_by('id')
         books_dict = {'book_records': ebook_list}
         return render(request, 'library_layout/ebooks.html', context=books_dict)
-
-
-def display_authors(request):
-    if request.method == "POST":
-        search = request.POST.get('searchedauthor')
-        author_list = author.objects.filter(name__contains=search)
-        authors_dict = {'author_records': author_list}
-        return render(request, 'library_layout/authors.html', context=authors_dict)
-    elif request.method == "GET":
-        author_list = author.objects.order_by('name')
-        authors_dict = {'author_records': author_list}
-        return render(request, 'library_layout/authors.html', context=authors_dict)
-
-
-def index(request):
-    try:
-        loans = loan.objects.filter(user=request.user)
-        for i in loans:
-            if i.loan_delete < datetime.date.today():
-                loan.objects.filter(id=i.id).delete()
-    except:
-        pass
-
-    author_list = author.objects.order_by('name')
-    ebook_list = ebook.objects.order_by('id')
-    items_dict = {'book_records': ebook_list, 'author_records': author_list}
-    return render(request, 'library_layout/index.html', context=items_dict)
-
-
-@login_required
-def loan_book(request, bookname, loan_type):
-    if int(loan_type) == 2:
-        loan_delete = datetime.date.today() + datetime.timedelta(days=7)
-    elif int(loan_type) == 3:
-        loan_delete = datetime.date.today() + datetime.timedelta(days=3)
-    else:
-        loan_delete = datetime.date.today() + datetime.timedelta(days=14)
-    ebookdata = ebook.objects.get(name=bookname)
-    loan.objects.get_or_create(user=request.user, ebook=ebookdata,
-                               loan_date=datetime.date.today(), loan_delete=loan_delete)
-    bookname = bookname.replace(' ', '%20')
-    return redirect(f"/library/book_profile/{bookname}/")
 
 
 def book_profile(request, bookname, ratefilter=False):
@@ -169,90 +186,6 @@ def book_profile(request, bookname, ratefilter=False):
     return render(request, 'library_layout/book_profile.html', context=info_dict)
 
 
-def author_profile(request, authorname):
-    author_info = author.objects.get(name=authorname)
-    book_info = ebook.objects.filter(author=author_info.id)
-    info_dict = {'author_info': author_info, 'book_info': book_info}
-    return render(request, 'library_layout/author_profile.html', context=info_dict)
-
-
-@login_required
-def user_profile(request):
-    emptyloan = False
-    emptyreview = False
-    wrongpass = False
-    user_info = request.user
-
-    if request.method == 'POST':
-        user_form = UserForm(data=request.POST, instance=user_info)
-
-        password = request.POST.get('old_password')
-        user = authenticate(username=user_info, password=password)
-        if user:
-            if user_form.is_valid():
-                user = user_form.save()
-                user.set_password(user.password)
-                user.save()
-                return HttpResponseRedirect(reverse('index'))
-        else:
-            wrongpass = True
-
-    user_form = UserForm(instance=request.user)
-
-    user_loans = loan.objects.filter(user=user_info)
-    for i in user_loans:
-        if i.loan_delete < datetime.date.today():
-            loan.objects.filter(id=i.id).delete()
-    if len(user_loans) == 0:
-        emptyloan = True
-    user_reviews = review.objects.filter(user=user_info)
-    if len(user_reviews) == 0:
-        emptyreview = True
-
-    user_dict = {'userinfo': user_info, 'userloans': user_loans, 'userreviews': user_reviews,
-                 'loans': emptyloan, 'reviews': emptyreview, 'user_form': user_form, 'wrongpass': wrongpass}
-    return render(request, 'library_layout/user_profile.html', context=user_dict)
-
-
-@login_required
-def delete_loan(request, bookname):
-    bookname = ebook.objects.get(name=bookname)
-    loan.objects.filter(user=request.user, ebook=bookname).delete()
-    return redirect('/library/profile')
-
-
-@login_required
-def delete_review(request, review_id):
-    review.objects.filter(id=review_id).delete()
-    return redirect(request. META['HTTP_REFERER'])
-
-
-@login_required
-def update_review(request, review_id):
-    if request.method == 'POST':
-        new_text = request.POST.get('review')
-        new_rating = request.POST.get('inlineRadioOptions')
-        review.objects.filter(user=request.user, id=review_id).update(
-            rating=new_rating, text_field=new_text)
-        return redirect('/library/profile')
-    reviews = review.objects.filter(user=request.user, id=review_id)
-    dict = {'review': reviews[0], }
-    return render(request, 'library_layout/review_update_form.html', context=dict)
-
-
-@login_required
-def delete_user(request):
-    if request.method == 'POST':
-        value = request.POST.get('button')
-        if value == "abort":
-            return redirect('/library/profile')
-        elif value == "delete":
-            user = request.user
-            user.delete()
-            return redirect('index')
-    return render(request, 'library_layout/user_delete.html')
-
-
 @staff_member_required
 def add_book(request):
     added = False
@@ -289,6 +222,49 @@ def update_book(request, book_id):
 def delete_book(request, book_id):
     ebook.objects.filter(id=book_id).delete()
     return redirect('index')
+# end of ebook views
+
+# loan views
+@login_required
+def loan_book(request, bookname, loan_type):
+    if int(loan_type) == 2:
+        loan_delete = datetime.date.today() + datetime.timedelta(days=7)
+    elif int(loan_type) == 3:
+        loan_delete = datetime.date.today() + datetime.timedelta(days=3)
+    else:
+        loan_delete = datetime.date.today() + datetime.timedelta(days=14)
+    ebookdata = ebook.objects.get(name=bookname)
+    loan.objects.get_or_create(user=request.user, ebook=ebookdata,
+                               loan_date=datetime.date.today(), loan_delete=loan_delete)
+    bookname = bookname.replace(' ', '%20')
+    return redirect(f"/library/book_profile/{bookname}/")
+
+
+@login_required
+def delete_loan(request, bookname):
+    bookname = ebook.objects.get(name=bookname)
+    loan.objects.filter(user=request.user, ebook=bookname).delete()
+    return redirect('/library/profile')
+# end of loan views
+
+# author views
+def display_authors(request):
+    if request.method == "POST":
+        search = request.POST.get('searchedauthor')
+        author_list = author.objects.filter(name__contains=search)
+        authors_dict = {'author_records': author_list}
+        return render(request, 'library_layout/authors.html', context=authors_dict)
+    elif request.method == "GET":
+        author_list = author.objects.order_by('name')
+        authors_dict = {'author_records': author_list}
+        return render(request, 'library_layout/authors.html', context=authors_dict)
+
+
+def author_profile(request, authorname):
+    author_info = author.objects.get(name=authorname)
+    book_info = ebook.objects.filter(author=author_info.id)
+    info_dict = {'author_info': author_info, 'book_info': book_info}
+    return render(request, 'library_layout/author_profile.html', context=info_dict)
 
 
 @staff_member_required
@@ -335,7 +311,34 @@ def delete_author(request, author_id):
             return redirect('index')
     authors = author.objects.get(id=author_id)
     return render(request, 'library_layout/author_delete.html', {'author': authors})
+# end of author views
 
 
+# review views
+'''
+creation of new reviews is part of book_profile()
+'''
+
+@login_required
+def delete_review(request, review_id):
+    review.objects.filter(id=review_id).delete()
+    return redirect(request. META['HTTP_REFERER'])
+
+
+@login_required
+def update_review(request, review_id):
+    if request.method == 'POST':
+        new_text = request.POST.get('review')
+        new_rating = request.POST.get('inlineRadioOptions')
+        review.objects.filter(user=request.user, id=review_id).update(
+            rating=new_rating, text_field=new_text)
+        return redirect('/library/profile')
+    reviews = review.objects.filter(user=request.user, id=review_id)
+    dict = {'review': reviews[0], }
+    return render(request, 'library_layout/review_update_form.html', context=dict)
+# end of review views
+
+# terms
 def terms(request):
     return render(request, 'library_layout/terms.html')
+# end of terms

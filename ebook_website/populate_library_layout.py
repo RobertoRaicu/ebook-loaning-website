@@ -73,9 +73,9 @@ def populate_reviews(n=300):
 if __name__ == '__main__':
     #DO NOT CHANGE FUNTION CALL ORDER. THE FUNCTIONS ARE CODEPENDEDNT!!
     #number in parentheses defines amount of items populated
-    author_populate = populate_authors(20)
-    book_populate = populate_books(200)
-    review_populate = populate_reviews(700)
+    author_populate = populate_authors(5)
+    book_populate = populate_books(20)
+    review_populate = populate_reviews(100)
 
     
     print("script complete")

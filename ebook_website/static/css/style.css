@@ -28,20 +28,11 @@ td {
 
 #bg {
 	background-image: linear-gradient(to bottom right, #2b5876, #4e4376);
-	/* background-image: url("../images/20603977_background3.jpg"); */
 	height: 100%;
 	background-attachment: fixed;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
-}
-
-#footer {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: 60px;
-	background: rgb(224, 11, 11);
 }
 
 .links:hover {
